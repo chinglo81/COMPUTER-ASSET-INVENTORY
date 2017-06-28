@@ -1,0 +1,31 @@
+Pages
+1. Add Asset – Scan – Completed
+2. Add Asset – Upload – Not Doing for V_1
+3. Asset Search Page – Completed 
+4. Student Search Page - Completed
+4. View/Edit Asset – Completed
+5. Add/Edit Bin – Completed
+6. Check Out Asset – Completed
+7. Check In Asset – Completed - Additional changes to search by serial number
+8. Lost/Stolen – Completed
+9. Found  - Completed
+10. Asset Followup - Unidentified, Research, Needs to evaluate – Completed
+11. Repair Owned Asset – Completed
+12. Repair Leased Asset – Completed
+13. Transfer Asset – Completed
+14. Tampered Asset - Completed
+15. Law Enforcement - Completed
+
+Processes/Jobs
+    Insurance Import     
+    Service Fee Import
+    Student Fee Update
+    School Messenger Files(2)
+    Discipline Notification
+
+Outstanding
+- Navigation - Completed
+- Security on all pages - Completed
+    -Director Role
+    -Computer Tech
+    -Site Staff

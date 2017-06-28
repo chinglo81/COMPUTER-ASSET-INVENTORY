@@ -1,0 +1,5 @@
+C:\inetpub\wwwroot\apps\CAIRS_V2\CAIRS\bin\CAIRS.dll.config
+C:\inetpub\wwwroot\apps\CAIRS_V2\CAIRS\bin\CAIRS.dll
+C:\inetpub\wwwroot\apps\CAIRS_V2\CAIRS\bin\CAIRS.pdb
+C:\inetpub\wwwroot\apps\CAIRS_V2\CAIRS\obj\Release\CAIRS.dll
+C:\inetpub\wwwroot\apps\CAIRS_V2\CAIRS\obj\Release\CAIRS.pdb

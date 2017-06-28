@@ -1,0 +1,206 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="CAIRSMasterPage.master.cs" Inherits="CAIRS.CAIRSMasterPage" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<%@ Register TagPrefix="header" TagName="_header" Src="~/Pages/_partials/header.ascx" %>
+<%@ Register TagPrefix="menu" TagName="_menu" Src="~/Pages/_partials/menu.ascx" %>
+
+<%@ Register Src="~/Controls/LOOKUP_Employee.ascx" TagName="Employee_lookup" TagPrefix="UC" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+	<title>CAIRS</title>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+	<!-- jQuery UI theme -->
+	<link href="https://cdn.mcs4kids.com/css/jquery-ui-theme.css" rel="stylesheet" />
+
+	<!-- Default CSS -->
+	<link href="https://cdn.mcs4kids.com/css/default.css" rel="stylesheet" />
+
+	<!-- Multi-select Jquery query style -->
+	<link href="../css/bootstrap-multiselect.css" rel="stylesheet" />
+
+	<!-- App specific CSS -->
+	<link href="../css/app.css" rel="stylesheet" />
+
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="js/vendor/respond.min.js"></script><![endif]-->
+
+	<!-- jQuery: 2.2.4 minified jQuery -->
+	<script src="https://cdn.mcs4kids.com/js/vendor/jquery-2.2.4.min.js"></script>
+
+	<!-- jQuery UI: 1.12.0 minified jQuery -->
+	<script src="https://cdn.mcs4kids.com/js/vendor/jquery.ui-1.12.0.min.js"></script>
+
+	<!-- Bootstrap: Compiled and minified JavaScript -->
+	<script src="https://cdn.mcs4kids.com/js/vendor/bootstrap.min.js"></script>
+
+	<!-- Additional jQuery plugins -->
+	<script src="https://cdn.mcs4kids.com/js/vendor/jquery.extras.js"></script>
+
+	<!-- jQuery multi-select -->
+	<script src="../js/vendor/bootstrap-multiselect.js"></script>
+
+	<!-- jQuery Placeholder Polyfill -->
+	<script src="../js/vendor/placeholder.min.js"></script>
+
+	<!-- Default javascript -->
+	<script src="https://cdn.mcs4kids.com/js/default.js"></script>
+
+	<!-- App specific javascript -->
+	<script src="../js/app.js"></script>
+
+	<script src="//cdn.mcs4kids.com/js/support-plugin.js"></script>
+
+	<asp:ContentPlaceHolder ID="head" runat="server" />
+	<meta name="description" content="The description of my page" />
+
+</head>
+<body class="has-menu">
+	<form id="form1" runat="server">
+		<asp:ScriptManager ID="ScriptManager1" runat="server" />
+
+		<!-- BODY SECTION --->
+		<div id="body">
+
+			<!-- Header -->
+			<header:_header ID="header" runat="server" />
+
+			<!--Navigation-->
+			<menu:_menu ID="menu" runat="server" />
+			<div runat="server" id="divMenuPlaceHolder">
+				<nav class="nav-drawer"></nav>
+			</div>
+			<div id="divDevelopment">
+				<asp:Label runat="server" ID="lblDatabase"></asp:Label>
+			</div>
+			<!-- User Info -->
+			<div class="user-info">
+				<asp:Label runat="server" ID="lblLoggedOnUser"></asp:Label>
+				<br />
+				<asp:LinkButton
+					runat="server"
+					ID="lnkBtnChangeLogin"
+					CausesValidation="false"
+					CssClass="btn btn-invert btn-xs"
+					Visible="false"
+					Text="Change&nbsp;login"
+					OnClick="lnkBtnChangeLogin_Click">
+				</asp:LinkButton>
+				<div id="divChangeLogin" runat="server" visible="false">
+					<table>
+						<tr>
+							<td>
+								<UC:Employee_lookup runat="server" ID="txtEmployeeLookup" />
+							</td>
+							<td>
+								<asp:LinkButton
+									runat="server"
+									ID="lnkSaveChangeLogin"
+									CausesValidation="false"
+									Text="Save"
+									OnClick="lnkSaveChangeLogin_Click">
+								</asp:LinkButton>
+							</td>
+							<td style="width: 5px;"></td>
+							<td>
+								<asp:LinkButton
+									runat="server"
+									ID="lnkCancelChangeLogin"
+									CausesValidation="false"
+									Text="Cancel"
+									OnClick="lnkCancelChangeLogin_Click">
+								</asp:LinkButton>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<!-- Content -->
+			<div id="content">
+				<asp:ContentPlaceHolder ID="cph_Body" runat="server">
+
+					<!-- Run jQuery functions for Update Panel refreshes -->
+					<script type="text/javascript">
+						Sys.WebForms.PageRequestManager.getInstance().add_endRequest(iePlaceholderFix);
+					</script>
+
+				</asp:ContentPlaceHolder>
+
+                <div class="modal fade" id="divLoading" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="divWaiting">
+                        <img src="../Images/ajax-loader.gif"  />
+                    </div>
+                </div>
+                
+			</div>
+		</div>
+
+		<!-- Bootstrap Modal Dialog -->
+		<div class="modal fade" id="popupMessage" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog custom-class">
+				<asp:UpdatePanel ID="upModal" runat="server" ChildrenAsTriggers="false" UpdateMode="Conditional">
+					<ContentTemplate>
+						<div class="panel panel-info" runat="server" id="modalTitle">
+							<div class="panel-heading">
+								<button type="button" class="close" data-dismiss="modal"><span class="material-icons">cancel</span></button>
+								<h4 class="modal-title">
+									<asp:Label ID="lblModalTitle" runat="server" Text=""></asp:Label></h4>
+							</div>
+							<div class="panel-body">
+								<asp:Label ID="lblModalBody" runat="server" Text=""></asp:Label>
+							</div>
+							<div class="modal-footer">
+								<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+							</div>
+						</div>
+					</ContentTemplate>
+				</asp:UpdatePanel>
+			</div>
+		</div>
+
+
+		<!-- Validation for modal -->
+		<div id="divValidation" class="modal-dialog">
+			<asp:ModalPopupExtender
+				ID="mpxValidation"
+				runat="server"
+				TargetControlID="btnShowPopup"
+				PopupControlID="pnlValidation"
+				BackgroundCssClass="modalBackground"
+				DropShadow="true"
+				CancelControlID="btnOkValidation">
+			</asp:ModalPopupExtender>
+			<asp:Panel runat="server" ID="pnlValidation" class="modal-content" Style="display: none;">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h3 class="modal-title">Validation Error</h3>
+					</div>
+					<div class="modal-body">
+						<asp:ValidationSummary runat="server" ID="vsValidationSummary" HeaderText="<span style='color:red; font-weight: bold;'>Please correct the following:</span>" />
+					</div>
+					<div class="modal-footer">
+						<asp:Button runat="server" ID="btnOkValidation" class="btn btn-primary" data-dismiss="modal" Text="Close" />
+					</div>
+				</div>
+			</asp:Panel>
+			<asp:Button ID="btnShowPopup" Style="display: none;" runat="server" />
+		</div>
+	</form>
+
+
+</body>
+</html>
