@@ -40,22 +40,13 @@ namespace CAIRS.Controls {
         protected global::System.Web.UI.WebControls.HiddenField hdnAssetTamperID;
         
         /// <summary>
-        /// lblAddAttachment control.
+        /// ddlAttachmentType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblAddAttachment;
-        
-        /// <summary>
-        /// chkAddAttachment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chkAddAttachment;
+        protected global::CAIRS.Controls.DDL_AttachmentType ddlAttachmentType;
         
         /// <summary>
         /// txtFileName control.
@@ -109,7 +100,16 @@ namespace CAIRS.Controls {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FileUploadAttachment;
+        public global::System.Web.UI.WebControls.FileUpload FileUploadAttachment;
+        
+        /// <summary>
+        /// btnAddAttachment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        public global::System.Web.UI.WebControls.Button btnAddAttachment;
         
         /// <summary>
         /// reqFile control.
@@ -130,13 +130,13 @@ namespace CAIRS.Controls {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regExFileType;
         
         /// <summary>
-        /// btnAddAttachment control.
+        /// cVUploadFileSize control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        public global::System.Web.UI.WebControls.Button btnAddAttachment;
+        protected global::System.Web.UI.WebControls.CustomValidator cVUploadFileSize;
         
         /// <summary>
         /// lblAttachmentResults control.

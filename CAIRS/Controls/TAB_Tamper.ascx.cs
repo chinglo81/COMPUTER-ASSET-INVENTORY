@@ -35,6 +35,19 @@ namespace CAIRS.Controls
         {
             return GetSetTamperID.Equals("-1");
         }
+
+        private bool ValidateSaveTamper()
+        {
+            bool isValid = true;
+
+            if (radCorrectStudent.SelectedValue.Equals("No") && Utilities.isNull(txtStudentLookup.SelectedStudentID) && Utilities.isNull(txtComment.Text))
+            {
+                cvComment.IsValid = false;
+                isValid = false;
+            }
+
+            return isValid;
+        }
         
         protected string QS_ASSET_ID
         {
@@ -93,12 +106,23 @@ namespace CAIRS.Controls
             if (ds.Tables[0].Rows.Count > 0)
             {
                 string sStudentID = ds.Tables[0].Rows[0]["Student_ID"].ToString().Trim();
+                string sDisableAddByBaseType = ds.Tables[0].Rows[0]["Disable_Add_By_Base_Type"].ToString().Trim();
+                string sBaseType =  ds.Tables[0].Rows[0]["Asset_Base_Type_Desc"].ToString().Trim();
 
                 if (Utilities.isNull(sStudentID))
                 {
                     trPreviousStudentAssigned.Visible = false;
-                    txtStudentLookup.Visible = true;
+                    //txtStudentLookup.Visible = true;
                     lblTamperedStudent.Visible = false;
+                }
+
+                bool isDisabledAdd = sDisableAddByBaseType.Equals("1");
+
+                btnAddTamper.Enabled = !isDisabledAdd;
+
+                if (isDisabledAdd)
+                {
+                    lblNotAllowCreateMsg.Text = "* Cannot Add Tamper for \"" + sBaseType.ToUpper() + "\"";
                 }
                 
              }
@@ -119,7 +143,7 @@ namespace CAIRS.Controls
                 if (Utilities.isNull(sStudentID))
                 {
                     trPreviousStudentAssigned.Visible = false;
-                    txtStudentLookup.Visible = true;
+                    //txtStudentLookup.Visible = true;
                     lblTamperedStudent.Visible = false;
                 }
 
@@ -215,6 +239,7 @@ namespace CAIRS.Controls
             {
                 p_Student_ID = txtStudentLookup.SelectedStudentID;
             }
+
             string p_Comment = txtComment.Text;
             string p_Added_By_Emp_ID = emp_id;
             string p_Date_Added = date_time;
@@ -276,8 +301,12 @@ namespace CAIRS.Controls
                     ApplySecurityToControl();
                     ShowHideLoadControl();
                 }
-                
-               
+            }
+
+            //this is to handle when student selects the student from the list
+            if (!Utilities.isNull(txtStudentLookup.SelectedStudentID))
+            {
+                DisplayDetails(false);
             }
 
             uc_TamperAttachment.AddAttachment_Click += btnAddAttachmentTamper_Click;
@@ -291,6 +320,7 @@ namespace CAIRS.Controls
         {
             DisplayDetails(false);
         }
+        
         protected void btnStudentLookup_Click(object sender, EventArgs e)
         {
             DisplayDetails(false);
@@ -321,8 +351,6 @@ namespace CAIRS.Controls
             }
         }
         
-        
-
         protected void btnViewTamper_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -371,7 +399,7 @@ namespace CAIRS.Controls
 
         protected void btnSaveManagePropertiesModal_Click(object sender, EventArgs e)
         {
-            if (Page.IsValid)
+            if (ValidateSaveTamper() && Page.IsValid)
             {
                 SaveTamper();
                 Utilities.CloseModal(Page, "popupManagePropertiesModal");
@@ -380,6 +408,10 @@ namespace CAIRS.Controls
                 {
                     btnSaveTamperClick(sender, EventArgs.Empty);
                 }
+            }
+            else
+            {
+                DisplayDetails(false);
             }
         }
 

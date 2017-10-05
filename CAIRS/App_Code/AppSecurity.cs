@@ -69,6 +69,24 @@ namespace CAIRS
             return iSecurityLevel;
         }
 
+        public static string Current_User_Site_Access()
+        {
+            //0 - Default - Initialize
+            //1 - All Site
+            //2 - Work Site
+            //3 - Custom
+
+            string site_access = "0";
+
+            DataSet ds = DatabaseUtilities.DsGetUserSecurityInfo(Utilities.GetLoggedOnUser());
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                site_access = ds.Tables[0].Rows[0]["includedsites"].ToString();
+            }
+            return site_access;
+
+        }
+
         public static string Current_User_Accessible_Site()
         {
             string accessibleSites = Current_Login_Accessible_Sites;
@@ -167,7 +185,7 @@ namespace CAIRS
         {
             //if user does not have access to the app, return false
             if (iCurrentUserSecurityAccessLevel.Equals(0))
-        {
+            {
                 return false;
             }
 
@@ -183,8 +201,11 @@ namespace CAIRS
                 return false;
             }
 
+            bool isDistrictTech = iCurrentUserSecurityAccessLevel.Equals(ROLE_DISTRICT_TECH);
+            bool isSiteTechWithAllSites = iCurrentUserSecurityAccessLevel.Equals(ROLE_SITE_TECH) && Current_User_Site_Access().Equals("1");
+
             //District tech has full access regardless of selected site(s)
-            if (iCurrentUserSecurityAccessLevel.Equals(ROLE_DISTRICT_TECH))
+            if (isDistrictTech || isSiteTechWithAllSites)
             {
                 return true;
             }

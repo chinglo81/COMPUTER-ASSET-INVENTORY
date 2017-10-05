@@ -1,0 +1,835 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>\\mcs-apps\c$\inetpub\wwwroot\cairs</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/AjaxControlToolkit.dll">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="bin/AjaxControlToolkit.dll.refresh">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="bin/AJAXExtensionsToolbox.dll">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="bin/AJAXExtensionsToolbox.dll.refresh">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="bin/CAIRS.dll">
+      <publishTime>09/20/2017 17:15:55</publishTime>
+    </File>
+    <File Include="bin/FreeTextBox.dll">
+      <publishTime>09/06/2017 10:02:36</publishTime>
+    </File>
+    <File Include="bin/Microsoft.ReportViewer.WebForms.DLL">
+      <publishTime>07/19/2017 09:15:26</publishTime>
+    </File>
+    <File Include="CAIRS_Task_List.txt">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="ClassDiagram1.cd">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="ClassDiagram2.cd">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-flex.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-flex.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-flex.min.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-flex.min.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.min.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-grid.min.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.min.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap-reboot.min.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css.map">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Controls/AddAssetAttachment.ascx">
+      <publishTime>08/18/2017 10:32:21</publishTime>
+    </File>
+    <File Include="Controls/DDL_AssetBaseType.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_AssetCondition.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_AssetDisposition.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_AssetType.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_AttachmentType.ascx">
+      <publishTime>08/22/2017 08:59:39</publishTime>
+    </File>
+    <File Include="Controls/DDL_Bin.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_InteractionType.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_MULTI_SELECT_CHECKBOX.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_RepairType.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/DDL_Site.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/EmailSignature.txt">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/LOOKUP_Employee.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/LOOKUP_Student.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/MULTI_SELECT_AssetCondition.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/MULTI_SELECT_AssetDisposition.ascx">
+      <publishTime>09/12/2017 10:57:06</publishTime>
+    </File>
+    <File Include="Controls/StudentInfoControl.ascx">
+      <publishTime>09/20/2017 14:25:24</publishTime>
+    </File>
+    <File Include="Controls/TAB_Assignment.ascx">
+      <publishTime>09/05/2017 08:38:23</publishTime>
+    </File>
+    <File Include="Controls/TAB_Attachment.ascx">
+      <publishTime>09/06/2017 15:38:00</publishTime>
+    </File>
+    <File Include="Controls/TAB_Changes.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/TAB_Comments.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/TAB_Repair.ascx">
+      <publishTime>08/07/2017 15:05:36</publishTime>
+    </File>
+    <File Include="Controls/TAB_Tamper.ascx">
+      <publishTime>08/28/2017 13:59:43</publishTime>
+    </File>
+    <File Include="Controls/TXT_Date.ascx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/TXT_SerialNumber.ascx">
+      <publishTime>07/23/2017 22:07:29</publishTime>
+    </File>
+    <File Include="Controls/TXT_TagID.ascx">
+      <publishTime>07/23/2017 22:07:48</publishTime>
+    </File>
+    <File Include="Controls/WebServiceGetEmployeeInfo.asmx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/WebServiceGetStudentInfo.asmx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="Controls/WebServiceGetStudentInfoWithSecurity.asmx">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="CSS/app.css">
+      <publishTime>08/17/2017 13:56:17</publishTime>
+    </File>
+    <File Include="CSS/bootstrap-multiselect.css">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="CSS/default.css">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="CSS/jquery-ui-theme.css">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="CSS/material-icons.css">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Fonts/MaterialIcons-Regular.eot">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Fonts/MaterialIcons-Regular.ttf">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Fonts/MaterialIcons-Regular.woff">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Fonts/MaterialIcons-Regular.woff2">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Images/accent.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/ajax-loader.gif">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/bullet.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/drop.gif">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/heroAccent.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/logo_mcs.jpg">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/MCSLogo.jpeg">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList0.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList1.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList2.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList3.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList4.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList5.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList6.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList7.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList8.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="Images/orderedList9.png">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="JS/addAsset.js">
+      <publishTime>07/19/2017 10:11:46</publishTime>
+    </File>
+    <File Include="JS/app.js">
+      <publishTime>07/19/2017 10:22:13</publishTime>
+    </File>
+    <File Include="JS/assetFollowUp.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/default.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/FAQ.js">
+      <publishTime>09/05/2017 15:42:21</publishTime>
+    </File>
+    <File Include="JS/Vendor/bootstrap-multiselect.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/bootstrap.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/jquery-2.2.4.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/jquery.extras.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/jquery.ui-1.12.0.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/modernizr-2.6.2-respond-1.1.0.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/placeholder.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/respond.min.js">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="JS/Vendor/_notes/dwsync.xml">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="MasterPages/CAIRSMasterPage.Master">
+      <publishTime>07/19/2017 08:50:05</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>09/06/2017 10:10:27</publishTime>
+    </File>
+    <File Include="Pages/AccessDeniedPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/AddAssetDetailPage.aspx">
+      <publishTime>07/19/2017 10:41:31</publishTime>
+    </File>
+    <File Include="Pages/AddAssetPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/AddAssetUploadPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/AddBinPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/ApplicationOfflinePage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/AssetFollowUpPage.aspx">
+      <publishTime>09/08/2017 14:19:35</publishTime>
+    </File>
+    <File Include="Pages/AssetReportPage.aspx">
+      <publishTime>07/19/2017 08:59:36</publishTime>
+    </File>
+    <File Include="Pages/AssetSearchPage.aspx">
+      <publishTime>07/19/2017 08:50:02</publishTime>
+    </File>
+    <File Include="Pages/CheckInAssetPage.aspx">
+      <publishTime>09/19/2017 11:01:25</publishTime>
+    </File>
+    <File Include="Pages/CheckOutAssetPage.aspx">
+      <publishTime>07/27/2017 08:53:38</publishTime>
+    </File>
+    <File Include="Pages/ErrorPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/FAQPage.aspx">
+      <publishTime>09/06/2017 10:16:38</publishTime>
+    </File>
+    <File Include="Pages/HomePage.aspx">
+      <publishTime>07/19/2017 08:57:42</publishTime>
+    </File>
+    <File Include="Pages/HtmlPage1.html">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/LostStolenAssetPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/ManageAssetPropertiesPage.aspx">
+      <publishTime>07/23/2017 22:10:53</publishTime>
+    </File>
+    <File Include="Pages/StudentSearchPage.aspx">
+      <publishTime>08/28/2017 13:24:39</publishTime>
+    </File>
+    <File Include="Pages/TestPage.aspx">
+      <publishTime>07/19/2017 08:50:03</publishTime>
+    </File>
+    <File Include="Pages/_partials/header.ascx">
+      <publishTime>07/27/2017 11:52:05</publishTime>
+    </File>
+    <File Include="Pages/_partials/menu.ascx">
+      <publishTime>09/06/2017 10:47:40</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.8.2.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.8.2.min.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.8.2.min.js.map">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.8.24.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.8.24.min.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.8.24.min.js.map">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.6.2.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/DetailsView.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/Focus.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/GridView.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/Menu.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MenuStandards.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjax.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxApplicationServices.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxComponentModel.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxCore.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxGlobalization.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxHistory.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxNetwork.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxSerialization.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxTimer.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxWebForms.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/MSAjax/MicrosoftAjaxWebServices.js">
+      <publishTime>07/19/2017 08:50:08</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/SmartNav.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/TreeView.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebForms.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebParts.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/WebForms/WebUIValidation.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="Scripts/_references.js">
+      <publishTime>07/19/2017 08:50:09</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.FormatDateTime.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.GetAssetAssignmentTypeNameById.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.GetAssetConditionNameById.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.GetAssetDispositionNameById.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.GetAssetTypeNameById.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.GetBinNameById.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/ScalarValued/dbo.PROPERCASE.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Function/TableValued/dbo.CSVToTable.UserDefinedFunction.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Assign_Asset_To_Bin.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Delete_Asset_Attachment.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Delete_Asset_Comment.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Delete_Asset_Repair.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Delete_Asset_Temp_Detail.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Insert_Audit_Log.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Submit_Asset_Temp_To_Asset.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Update_Asset_Repair_Received.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Update_Asset_Search_Detail_Check.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Attachment.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Audit_Log.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Bin_Mapping.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Bin_Mapping_Audit_Log.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Comment.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Repair.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Search.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Site_Mapping.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Site_Mapping_Audit_Log.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Temp_Detail.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Asset_Temp_Header.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_Bin.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Asset_Assignment_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Asset_Condition.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Asset_Disposition.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Asset_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Asset_Type_Fee_Schedule.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Device_Fee_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Fee_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_File_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Interaction_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Notification_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Repair_Type.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Site.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/dbo.sp_Upsert_CT_Vendor.StoredProcedure.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/StoredProcedure/security.dbo.sp_Insert_ApplicationExceptions.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/Table/App_Preference_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/App_User_Preference.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Attachment.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Audit_Log.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Bin_Mapping.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Bin_Mapping_Audit_Log.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_CheckOut_Exception_Student_Detail.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_CheckOut_Exception_Student_Header.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Comment.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Repair.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Search.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Search_Detail.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Site_Mapping.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Site_Mapping_Audit_Log.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Site_Stored_Mapping.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Student_Device_Fee.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Student_Fee.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Student_Notification.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Student_Transaction.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Student_Transaction_Interaction.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Temp_Detail.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Asset_Temp_Header.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Audit_Log.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Bin.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Business_Rule.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Business_Rule_Detail.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Assignment_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Base_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Base_Type_Fee_Schedule.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Condition.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Disposition.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Asset_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Device_Fee_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Device_Fee_Type_Schedule.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Device_Type_Fee_Schedule.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Fee_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_File_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Interaction_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Notification_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Repair_Type.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Site.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/CT_Vendor.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Attachment.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Bin_Mapping.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Comment.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Repair.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Search.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Search_Detail.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Site_Mapping.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Student_Transaction.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Student_Transaction_Interaction.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Temp_Detail.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Asset_Temp_Header.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Audit_Log.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.Bin.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Asset_Assignment_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Asset_Condition.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Asset_Disposition.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Asset_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Asset_Type_Fee_Schedule.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Device_Fee_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Fee_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_File_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Interaction_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Notification_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Repair_Type.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Site.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/dbo.CT_Vendor.Table.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/Table/Student_Device_Fee.sql">
+      <publishTime>07/19/2017 08:50:06</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Bin.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Master_List.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Tab_Assginment.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Tab_Attachments.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Tab_Changes.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Tab_Comments.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Tab_Repairs.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Asset_Temp_Header_Detail.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/dbo.v_Bin.View.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/v_Asset_Master_List.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="SQL/View/v_Asset_Temp_Header_Detail.sql">
+      <publishTime>07/19/2017 08:50:07</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>09/20/2017 17:15:55</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

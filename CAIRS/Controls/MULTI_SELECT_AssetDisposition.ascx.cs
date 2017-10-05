@@ -10,6 +10,7 @@ namespace CAIRS.Controls
 {
     public partial class MULTI_SELECT_AssetDisposition : System.Web.UI.UserControl
     {
+        public string Business_Rule_Code = "";
         public string SetSelectedValuePageLoad = "";
         public string GetSelectedValue
         {
@@ -47,7 +48,8 @@ namespace CAIRS.Controls
         private void LoadData()
         {
             //Load Data into Listbox
-            DataSet ds = DatabaseUtilities.DsGet_CTByTableName(Constants.TBL_CT_ASSET_DISPOSITION, false);
+            //DataSet ds = DatabaseUtilities.DsGet_CTByTableName(Constants.TBL_CT_ASSET_DISPOSITION, false);
+            DataSet ds = DatabaseUtilities.DsGetDisposition(false, Business_Rule_Code, Constants.COLUMN_CT_ASSET_DISPOSITION_Name);
 
             //Only load if data exist
             if (ds.Tables[0].Rows.Count > 0)

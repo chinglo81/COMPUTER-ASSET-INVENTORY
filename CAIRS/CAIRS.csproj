@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,36 +43,38 @@
       <HintPath>..\packages\AjaxControlToolkit.16.1.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="FreeTextBox, Version=3.3.1.12354, Culture=neutral, PublicKeyToken=5962a4e684a48b87, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\FreeTextBox.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Microsoft.ReportViewer.WebForms.DLL</HintPath>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\AjaxControlToolkit.dll" />
     <Content Include="bin\AJAXExtensionsToolbox.dll" />
     <Content Include="bin\CAIRS.dll" />
     <Content Include="bin\CAIRS.pdb" />
+    <Content Include="bin\FreeTextBox.dll" />
+    <Content Include="bin\Microsoft.ReportViewer.WebForms.DLL" />
     <Content Include="CAIRS_Task_List.txt" />
     <Content Include="Content\bootstrap-flex.css" />
     <Content Include="Content\bootstrap-flex.min.css" />
@@ -86,6 +89,7 @@
     <Content Include="Controls\DDL_AssetCondition.ascx" />
     <Content Include="Controls\DDL_AssetDisposition.ascx" />
     <Content Include="Controls\DDL_AssetType.ascx" />
+    <Content Include="Controls\DDL_AttachmentType.ascx" />
     <Content Include="Controls\DDL_Bin.ascx" />
     <Content Include="Controls\DDL_InteractionType.ascx" />
     <Content Include="Controls\DDL_MULTI_SELECT_CHECKBOX.ascx" />
@@ -133,7 +137,9 @@
     <Content Include="Images\orderedList9.png" />
     <Content Include="JS\addAsset.js" />
     <Content Include="JS\app.js" />
+    <Content Include="JS\assetFollowUp.js" />
     <Content Include="JS\default.js" />
+    <Content Include="JS\FAQ.js" />
     <Content Include="JS\Vendor\bootstrap-multiselect.js" />
     <Content Include="JS\Vendor\bootstrap.min.js" />
     <Content Include="JS\Vendor\jquery-2.2.4.min.js" />
@@ -143,6 +149,9 @@
     <Content Include="JS\Vendor\placeholder.min.js" />
     <Content Include="JS\Vendor\respond.min.js" />
     <Content Include="JS\Vendor\_notes\dwsync.xml" />
+    <Content Include="obj\Release\CAIRS.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Release\CAIRS.dll" />
+    <Content Include="obj\Release\CAIRS.pdb" />
     <Content Include="Pages\AccessDeniedPage.aspx" />
     <Content Include="Pages\AddAssetDetailPage.aspx" />
     <Content Include="Pages\AddAssetPage.aspx" />
@@ -155,6 +164,7 @@
     <Content Include="Pages\CheckInAssetPage.aspx" />
     <Content Include="Pages\CheckOutAssetPage.aspx" />
     <Content Include="Pages\ErrorPage.aspx" />
+    <Content Include="Pages\FAQPage.aspx" />
     <Content Include="Pages\HomePage.aspx" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
     <Content Include="Content\bootstrap-reboot.css.map" />
@@ -169,6 +179,9 @@
     <Content Include="bin\AJAXExtensionsToolbox.dll.refresh" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="ClassDiagram2.cd" />
+    <Content Include="obj\Release\CAIRS.csprojResolveAssemblyReference.cache" />
+    <Content Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="Properties\PublishProfiles\CAIRS_MCS_Apps-PROD.pubxml" />
     <None Include="Properties\PublishProfiles\CAIRS_MCS_Apps-QA.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Pages\HtmlPage1.html" />
@@ -373,6 +386,13 @@
     <Compile Include="Controls\DDL_AssetType.ascx.designer.cs">
       <DependentUpon>DDL_AssetType.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DDL_AttachmentType.ascx.cs">
+      <DependentUpon>DDL_AttachmentType.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\DDL_AttachmentType.ascx.designer.cs">
+      <DependentUpon>DDL_AttachmentType.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DDL_Bin.ascx.cs">
       <DependentUpon>DDL_Bin.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -530,6 +550,12 @@
     <Compile Include="Navigation\MCSUrl.cs" />
     <Compile Include="Navigation\URLDataSet.cs" />
     <Compile Include="Navigation\URLManager.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Pages\AccessDeniedPage.aspx.cs">
       <DependentUpon>AccessDeniedPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -615,6 +641,13 @@
     <Compile Include="Pages\ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\FAQPage.aspx.cs">
+      <DependentUpon>FAQPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\FAQPage.aspx.designer.cs">
+      <DependentUpon>FAQPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\HomePage.aspx.cs">
       <DependentUpon>HomePage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -678,7 +711,15 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="obj\Release\TempPE\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -694,7 +735,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52810</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/CAIRS_V2</IISUrl>
+          <IISUrl>http://localhost/CAIRS</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/CAIRS</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://localhost/apps/CAIRS/CAIRS/</CustomServerUrl>

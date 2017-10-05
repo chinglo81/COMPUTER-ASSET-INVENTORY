@@ -17,11 +17,11 @@ Pages
 15. Law Enforcement - Completed
 
 Processes/Jobs
-    Insurance Import     
-    Service Fee Import
-    Student Fee Update
+    Insurance Import - Completed     
+    Service Fee Import - Completed
+    Student Fee Update - Completed
     School Messenger Files(2)
-    Discipline Notification
+    Discipline Notification - Completed
 
 Outstanding
 - Navigation - Completed

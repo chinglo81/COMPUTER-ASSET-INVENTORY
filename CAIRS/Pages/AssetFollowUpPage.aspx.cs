@@ -56,7 +56,7 @@ namespace CAIRS.Pages
             {
                 divGrid.Visible = true;
                 alertAssetSearchResults.Visible = false;
-                lblResults.Text = "Total Recounds: " + iRowCount.ToString();
+                lblResults.Text = "Total Record(s): " + iRowCount.ToString();
 
                 dgAssetResults.CurrentPageIndex = int.Parse(PageIndex);
                 dgAssetResults.DataSource = ds;
@@ -232,10 +232,17 @@ namespace CAIRS.Pages
             spNewTag.Visible = false;
             txtNewTagID.Visible = false;
             divMsgNoSelectedForAssetBelongToStudent.Visible = false;
-            chkStartFoundProcess.Visible = false;
-            chkStartFoundProcess.Checked = false;
 
-            
+            //display submit button on initial load when not unidentified.
+            string disposition = hdn_Disposition_ID.Value;
+            btnSubmitFollowup.Visible = !disposition.Equals(Constants.DISP_UNIDENTIFIED);
+
+            divMsgNoSelectedForAssetBelongToStudent.Visible = false;
+        }
+
+        private void DisplayStartFoundProcess()
+        {
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "popupModal", "$('#popupStartFoundProcessModal').modal();", true);
         }
 
         private void DisplayFollowup(string header_caption, bool isReload)
@@ -281,7 +288,7 @@ namespace CAIRS.Pages
                 p_Disposition_ID = ddlDisposition_Followup.SelectedValue;
                 if (p_Disposition_ID.Equals(Constants.DISP_BROKEN))
                 {
-                    p_Condition_ID = ddlCondition_Followup.SelectedValue;
+                    
                     if(chkIsStudentResponsibleForDamage.Checked)
                     {
                         p_Stu_Responsible_For_Damage = "1";
@@ -289,6 +296,11 @@ namespace CAIRS.Pages
                 }
                 p_Bin_ID = ddlBin_Followup.SelectedValue;
                 p_Comments = txtComments_Followup.Text;
+            }
+
+            if (ddlCondition_Followup.Visible)
+            {
+                p_Condition_ID = ddlCondition_Followup.SelectedValue;
             }
 
 
@@ -316,14 +328,6 @@ namespace CAIRS.Pages
                 p_Emp_ID,
                 p_Date
             );
-        }
-
-        private void StartFoundProcessForUnidentified()
-        {
-            if (chkStartFoundProcess.Checked)
-            {
-                ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect", "window.open('CheckInAssetPage.aspx?Check_In_Type=4')", true);
-            }
         }
 
         protected new void Page_Load(object sender, EventArgs e)
@@ -436,14 +440,22 @@ namespace CAIRS.Pages
             if (ValidateSubmitFollowUp() && Page.IsValid)
             {
                 SaveFollowup();
-                StartFoundProcessForUnidentified();
                 LoadFollowUpDg();
                 CloseModal("popupFollowUp");
+                
+                bool IsYesSelected = radLstAssetBelongToStudent.SelectedValue.Equals("1");
+                bool IsUnidentified = hdn_Disposition_ID.Value.Equals(Constants.DISP_UNIDENTIFIED);
+
+                if (!IsYesSelected && IsUnidentified)
+                {
+                    DisplayStartFoundProcess();
+                }
             }
         }
 
         protected void radLstAssetBelongToStudent_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btnSubmitFollowup.Visible = true;
             bool IsYesSelected = radLstAssetBelongToStudent.SelectedValue.Equals("1");
 
             divStandardFollowup.Visible = IsYesSelected;
@@ -452,19 +464,23 @@ namespace CAIRS.Pages
             divMsgNoSelectedForAssetBelongToStudent.Visible = !IsYesSelected;
             if (!IsYesSelected)
             {
-                string msg = "NOTE: This asset will be flagged as \"Lost\" and student (" + hdn_Student_Name.Value + ") will be assessed a fee." ;
+                //string msg = "NOTE: This asset will be flagged as \"Lost\" and student (" + hdn_Student_Name.Value + ") will be assessed a fee." ;
+                string msg = "NOTE: This student (" + hdn_Student_Name.Value + ") will be assessed a fee for turning in an asset that doesn’t belong to him/her. The asset assigned to this student will be flagged as “Lost”.";
                 lblMsgNoSelectedforAssetBelongToStudent.Text = msg;
-
-                string msg_start_found = "<br/>&nbsp;&nbsp;After Submit, start \"Found Process\" in another tab for the asset in hand.";
-                chkStartFoundProcess.Text = msg_start_found;
             }
-            chkStartFoundProcess.Visible = !IsYesSelected;
+
+            divMsgNoSelectedForAssetBelongToStudent.Visible = !IsYesSelected;
         }
 
         protected void radAssignedNewTagID_SelectedIndexChanged(object sender, EventArgs e)
         {
             txtNewTagID.Visible = radAssignedNewTagID.SelectedValue.Equals("1");
             txtNewTagID.txtTagID.Focus();
+        }
+
+        protected void btnStartFoundProcess_Click(object sender, EventArgs e)
+        {
+            NavigateTo(Constants.PAGES_CHECK_IN_ASSET_PAGE + "?Check_In_Type=4", false);
         }
 
     }

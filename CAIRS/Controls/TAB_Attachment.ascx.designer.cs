@@ -94,6 +94,15 @@ namespace CAIRS.Controls {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAssetAttachmentInfo;
         
         /// <summary>
+        /// ddlAttachmentType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CAIRS.Controls.DDL_AttachmentType ddlAttachmentType;
+        
+        /// <summary>
         /// hdnFileType control.
         /// </summary>
         /// <remarks>
@@ -173,6 +182,69 @@ namespace CAIRS.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator regExFileType;
+        
+        /// <summary>
+        /// cvUploadFileSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvUploadFileSize;
+        
+        /// <summary>
+        /// divAssetStudentTransactionInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAssetStudentTransactionInfo;
+        
+        /// <summary>
+        /// ddlAssetStudentTransaction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlAssetStudentTransaction;
+        
+        /// <summary>
+        /// divTamperInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTamperInfo;
+        
+        /// <summary>
+        /// lblIsTampered control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblIsTampered;
+        
+        /// <summary>
+        /// divStudentTamperInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divStudentTamperInfo;
+        
+        /// <summary>
+        /// lblStudent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblStudent;
         
         /// <summary>
         /// btnSaveAttachment control.

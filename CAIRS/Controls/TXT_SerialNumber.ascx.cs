@@ -12,6 +12,7 @@ namespace CAIRS.Controls
         public bool IsSerialNumRequired = false;
         public string FieldName = "Serial Number";
         public string ValidationGroup = "";
+        public string PlaceHolder = "Serial #";
 
         public string Text
         {
@@ -33,6 +34,8 @@ namespace CAIRS.Controls
                 reqSerialNum.Visible = IsSerialNumRequired;
                 reqSerialNum.ErrorMessage = "Required Field: " + FieldName;
                 reqSerialNum.ValidationGroup = ValidationGroup;
+
+                txtSerialNumber.Attributes.Add("placeholder", PlaceHolder);
             }
         }
     }

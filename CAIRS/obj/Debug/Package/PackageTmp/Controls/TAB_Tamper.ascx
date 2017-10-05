@@ -3,7 +3,6 @@
 <%@ Register Src="~/Controls/AddAssetAttachment.ascx" TagName="Add_Attachment" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/LOOKUP_Student.ascx" TagName="LookUp_Student" TagPrefix="UC" %>
 
-
         <asp:HiddenField ID="hdnAssetTamperID" Value="-1" runat="server" />
 
         <asp:Label runat="server" ID="lblResults" />
@@ -25,6 +24,14 @@
 				    <ItemTemplate>
 
 					    <%# DataBinder.Eval(Container.DataItem, "Student_Name")%>
+
+				    </ItemTemplate>
+			    </asp:TemplateColumn> 
+
+                <asp:TemplateColumn HeaderText="School">
+				    <ItemTemplate>
+
+					    <%# DataBinder.Eval(Container.DataItem, "Student_School_Desc")%>
 
 				    </ItemTemplate>
 			    </asp:TemplateColumn> 
@@ -133,7 +140,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        Did previous student "<asp:Label runat="server" ID="lblStudent" data_column="Student_Name"></asp:Label>" tamper with this asset?
+                                        Did most recently assigned student "<asp:Label runat="server" ID="lblStudent" data_column="Student_Name"></asp:Label>" tamper with this asset?
                                         <asp:HiddenField runat="server" ID="hdnStudentID" value="Student_ID" />
                                     </td>
                                 </tr>
@@ -160,8 +167,6 @@
                                 runat="server" 
                                 ID="txtStudentLookup" 
                                 IsControlOnModal="true"
-                                IsStudentLookupRequired="true" 
-                                ValidationGroup="vgSaveTamper"
                                 btnChangeStudentClick="btnStudentLookup_Click"
                                 btnSearchStudentClick="btnStudentLookup_Click"
                             />
@@ -175,6 +180,15 @@
                         </td>
                         <td>
                             <asp:TextBox runat="server" ID="txtComment" data_column="Comment" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
+                            <asp:CustomValidator
+                                runat="server"
+                                ID="cvComment"
+                                CssClass="invalid"
+                                Text="Required if a student is not selected"
+                                ErrorMessage="Required if a student is not selected"
+                                ValidationGroup="vgSaveTamper"
+                                >
+                            </asp:CustomValidator>
                         </td>
                     </tr>
                     <tr runat="server" id="trDateProcessed">
@@ -235,7 +249,7 @@
                         </td>
                     </tr>
                     <tr runat="server" id="trExistingAttachments">
-                            <td colspan="2">
+                        <td colspan="2">
                             <h4>Existing Attachment</h4>
 
                             <asp:Label runat="server" ID="lblResultsAttachment"></asp:Label>
@@ -305,12 +319,12 @@
                             </Columns>
                         </asp:DataGrid>
                             </td>
-                        </tr>
+                    </tr>
                 </table>
             </div>
 
             <div class="modal-footer">
-                    
+  
                 <asp:Button 
                     ID="btnSaveManagePropertiesModal" 
                     Text="Save" 

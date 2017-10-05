@@ -432,6 +432,8 @@ namespace CAIRS.Pages
 			PageIndex = "0";
 
 			LoadBinDG();
+
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "HideModal", "HideProgressLoader();", true);
 		}
 
 		protected void dgBin_SortCommand(object source, DataGridSortCommandEventArgs e)
@@ -466,7 +468,7 @@ namespace CAIRS.Pages
 			{
 				ActiveBin(id);
 				LoadBinDG();
-				DisplayMessage("Asset Activated", "Asset has been activated. You can now assign asset(s) to this bin.");
+				DisplayMessage("Bin Activated", "Bin has been activated. You can now assign asset(s) to this bin.");
 				return;
 			}
 			

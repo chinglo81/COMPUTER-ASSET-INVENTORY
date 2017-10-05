@@ -141,14 +141,14 @@
                                     <td><strong>Tag ID</strong></td>
                                     <td>
                                         <asp:Label runat="server" ID="lblTagID" data_column="Tag_ID"></asp:Label>
-                                        <UC:TXT_TagID runat="server" ID="txtTagIDEdit" Visible="false" IsTagIDRequired="true" ValidationGroup="vgEditAsset" />
+                                        <UC:TXT_TagID runat="server" ID="txtTagIDEdit" Visible="false" IsTagIDRequired="true" ValidationGroup="vgEditAsset" PlaceHolder=""/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Serial #</strong></td>
                                     <td>
                                         <asp:Label runat="server" ID="lblSerialNumber" data_column="Serial_Number"></asp:Label>
-                                        <UC:TXT_SerialNumber runat="server" ID="txtSerialNumberEdit" Visible="false" IsSerialNumRequired="true" ValidationGroup="vgEditAsset" />
+                                        <UC:TXT_SerialNumber runat="server" ID="txtSerialNumberEdit" Visible="false" IsSerialNumRequired="true" ValidationGroup="vgEditAsset" PlaceHolder="" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -200,7 +200,6 @@
                                             EnableClientScript="false" 
                                             ValidationGroup="vgEditAsset" 
                                             IsDateRequired="false" 
-                                            PlaceHolder="" 
                                             data_column="Date_Purchased"/>
                                     </td>
                                 </tr>
@@ -210,8 +209,7 @@
                                         <asp:Label runat="server" ID="lblLeasedTermDays" data_column="Leased_Term_Date_Desc"></asp:Label>
                                         <asp:TextBox 
                                             runat="server" 
-                                            ID="txtLeasedTermDays" 
-                                            placeholder="Lease Term in Days" 
+                                            ID="txtLeasedTermDays"
                                             MaxLength="4" 
                                             CssClass="form-control" 
                                             Visible="false"
@@ -238,8 +236,7 @@
                                         <asp:Label runat="server" ID="lblWarrantyTermDays" data_column="Warranty_Term_Date_Desc"></asp:Label>
                                         <asp:TextBox 
                                             runat="server" 
-                                            ID="txtWarrantyTerm" 
-                                            placeholder="Warranty Term in Days" 
+                                            ID="txtWarrantyTerm"
                                             MaxLength="4" 
                                             Visible="false"
                                             CssClass="form-control" 
@@ -397,8 +394,6 @@
             </div>
         </div>
     </div>
-        
-
 
     <br /><br />
 
@@ -485,133 +480,144 @@
                         <div class="panel-body" id="divLawEnforcementInfo" runat="server">
                             <div class="table-responsive modal-body">
 
-                            <table class="table table-form table-condensed table-valign-middle">
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Law Enforcement Agency
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList runat="server" ID="ddlLawEnforcementAgency" CssClass="form-control" data_column="Law_Enforcement_Agency_ID"></asp:DropDownList>
+                                <table class="table table-form table-condensed table-valign-middle">
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Law Enforcement Agency
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:DropDownList runat="server" ID="ddlLawEnforcementAgency" CssClass="form-control" data_column="Law_Enforcement_Agency_ID"></asp:DropDownList>
                                         
-                                        <asp:RequiredFieldValidator
-                                            ID="reqDdlLawEnforcement"
-                                            runat="server"
-                                            InitialValue="-1"
-                                            ControlToValidate="ddlLawEnforcementAgency"
-                                            CssClass="invalid"
-                                            ErrorMessage="Required"
-                                            Text="Required"
-                                            ValidationGroup="vgLawEnforcement"
-                                        />
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Officer First Name
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox runat="server" ID="txtOfficerFirstName" CssClass="form-control" MaxLength="100" data_column="Officer_First_Name"></asp:TextBox>
-
-                                        <asp:RequiredFieldValidator
-                                            ID="reqOfficerFirstName"
-                                            runat="server"
-                                            ControlToValidate="txtOfficerFirstName"
-                                            CssClass="invalid"
-                                            ErrorMessage="Required"
-                                            Text="Required"
-                                            ValidationGroup="vgLawEnforcement"
-                                        />
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Officer Last Name
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox runat="server" ID="txtOfficerLastName" CssClass="form-control" MaxLength="100" data_column="Officer_Last_Name"></asp:TextBox>
-
-                                        <asp:RequiredFieldValidator
-                                            ID="reqOfficerLastName"
-                                            runat="server"
-                                            ControlToValidate="txtOfficerLastName"
-                                            CssClass="invalid"
-                                            ErrorMessage="Required"
-                                            Text="Required"
-                                            ValidationGroup="vgLawEnforcement"
-                                        />
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Case Number
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox runat="server" ID="txtCaseNumber" CssClass="form-control" MaxLength="100" data_column="Case_Number"></asp:TextBox>
-
-                                        <asp:RequiredFieldValidator
-                                            ID="reqCaseNumber"
-                                            runat="server"
-                                            ControlToValidate="txtCaseNumber"
-                                            CssClass="invalid"
-                                            ErrorMessage="Required"
-                                            Text="Required"
-                                            ValidationGroup="vgLawEnforcement"
-                                        />
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Comment
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:TextBox runat="server" ID="txtComment" CssClass="form-control" TextMode="MultiLine" data_column="Comment"></asp:TextBox>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            Date Pickup
-                                        </strong>
-                                    </td>
-                                    <td>
-                                         <UC:Date 
-                                            runat="server" 
-                                            ID="txtDatePickup" 
-                                            EnableClientScript="false" 
-                                            ValidationGroup="vgLawEnforcement" 
-                                            IsDateRequired="true" 
-                                            PlaceHolder="" 
-                                            data_column="Date_Picked_Up_Formatted"
+                                            <asp:RequiredFieldValidator
+                                                ID="reqDdlLawEnforcement"
+                                                runat="server"
+                                                InitialValue="-1"
+                                                ControlToValidate="ddlLawEnforcementAgency"
+                                                CssClass="invalid"
+                                                ErrorMessage="Required"
+                                                Text="Required"
+                                                ValidationGroup="vgLawEnforcement"
                                             />
-                                    </td>
-                                </tr>
-                                <tr runat="server" id="trDateReturned">
-                                    <td>
-                                        <strong>
-                                            Date Returned
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <asp:Label runat="server" ID="lblDateReturned" data_column="Date_Returned_Formatted"></asp:Label>
-                                    </td>
-                                </tr>
-                            </table>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Case Number
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox runat="server" ID="txtCaseNumber" CssClass="form-control" MaxLength="100" data_column="Case_Number"></asp:TextBox>
+
+                                            <asp:RequiredFieldValidator
+                                                ID="reqCaseNumber"
+                                                runat="server"
+                                                ControlToValidate="txtCaseNumber"
+                                                CssClass="invalid"
+                                                ErrorMessage="Required"
+                                                Text="Required"
+                                                ValidationGroup="vgLawEnforcement"
+                                            />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h4>
+                                                Pick Up Information
+                                            </h4>
+
+                                            <hr />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                First Name
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox runat="server" ID="txtOfficerFirstName" CssClass="form-control" MaxLength="100" data_column="Officer_First_Name"></asp:TextBox>
+
+                                            <asp:RequiredFieldValidator
+                                                ID="reqOfficerFirstName"
+                                                runat="server"
+                                                ControlToValidate="txtOfficerFirstName"
+                                                CssClass="invalid"
+                                                ErrorMessage="Required"
+                                                Text="Required"
+                                                ValidationGroup="vgLawEnforcement"
+                                            />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Last Name
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox runat="server" ID="txtOfficerLastName" CssClass="form-control" MaxLength="100" data_column="Officer_Last_Name"></asp:TextBox>
+
+                                            <asp:RequiredFieldValidator
+                                                ID="reqOfficerLastName"
+                                                runat="server"
+                                                ControlToValidate="txtOfficerLastName"
+                                                CssClass="invalid"
+                                                ErrorMessage="Required"
+                                                Text="Required"
+                                                ValidationGroup="vgLawEnforcement"
+                                            />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Pickup Date
+                                            </strong>
+                                        </td>
+                                        <td>
+                                             <UC:Date 
+                                                runat="server" 
+                                                ID="txtDatePickup" 
+                                                EnableClientScript="false" 
+                                                ValidationGroup="vgLawEnforcement" 
+                                                IsDateRequired="true" 
+                                                PlaceHolder="" 
+                                                data_column="Date_Picked_Up_Formatted"
+                                                />
+                                        </td>
+                                    </tr>
+                                    <tr runat="server" id="trDateReturned">
+                                        <td>
+                                            <strong>
+                                                Date Returned
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:Label runat="server" ID="lblDateReturned" data_column="Date_Returned_Formatted"></asp:Label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Comment
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox runat="server" ID="txtComment" CssClass="form-control" TextMode="MultiLine" data_column="Comment"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                </table>
 
                             </div>
+
                         </div>
 
                         <div class="modal-footer">
@@ -676,15 +682,7 @@
 										</ItemTemplate>
 									</asp:TemplateColumn>
 
-									<asp:TemplateColumn HeaderText="Officer">
-										<ItemTemplate>
-
-											<%# DataBinder.Eval(Container.DataItem, "Officer_Full_Name")%>
-
-										</ItemTemplate>
-									</asp:TemplateColumn>
-
-									<asp:TemplateColumn HeaderText="Case #">
+                                    <asp:TemplateColumn HeaderText="Case #">
 										<ItemTemplate>
 
 											<%# DataBinder.Eval(Container.DataItem, "Case_Number")%>
@@ -692,13 +690,23 @@
 										</ItemTemplate>
 									</asp:TemplateColumn>
 
-									<asp:TemplateColumn HeaderText="Comment">
+									<asp:TemplateColumn HeaderText="Name">
+										<ItemTemplate>
+
+											<%# DataBinder.Eval(Container.DataItem, "Officer_Full_Name")%>
+
+										</ItemTemplate>
+									</asp:TemplateColumn>
+
+									
+
+									<%--<asp:TemplateColumn HeaderText="Comment">
 										<ItemTemplate>
 
 											<%# DataBinder.Eval(Container.DataItem, "Comment_Short")%>
 
 										</ItemTemplate>
-									</asp:TemplateColumn>
+									</asp:TemplateColumn>--%>
 
 									<asp:TemplateColumn HeaderText="Pickup Date">
 										<ItemTemplate>

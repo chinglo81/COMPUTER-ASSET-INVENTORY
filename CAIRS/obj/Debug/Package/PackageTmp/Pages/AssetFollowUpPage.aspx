@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPages/CAIRSMasterPage.Master" AutoEventWireup="true" CodeBehind="AssetFollowUpPage.aspx.cs" Inherits="CAIRS.Pages.AssetFollowUpPage" ValidateRequest="false"%>
+﻿<%@ Page Title="CAIRS - Asset Follow-up" Language="C#" MasterPageFile="~/MasterPages/CAIRSMasterPage.Master" AutoEventWireup="true" CodeBehind="AssetFollowUpPage.aspx.cs" Inherits="CAIRS.Pages.AssetFollowUpPage" ValidateRequest="false"%>
 
 <%@ Register Src="~/Controls/DDL_Site.ascx" TagName="DDL_Site" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/DDL_AssetDisposition.ascx" TagName="DDL_AssetDisposition" TagPrefix="UC" %>
@@ -9,6 +9,8 @@
 <%@ Register Src="~/Controls/AddAssetAttachment.ascx" TagName="Add_Attachment" TagPrefix="UC" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <!-- Add Asset specific javascript -->
+	<script src="../js/assetFollowUp.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_Body" runat="server">
     <asp:UpdatePanel runat="server" ID="updatePanelAssetFollowup">
@@ -223,10 +225,6 @@
                             <!--START Unidentified Followup-->
 
                             <div runat="server" id="divUnidentifiedFollowup">
-                                
-                                <div class="alert alert-info" runat="server" id="divMsgNoSelectedForAssetBelongToStudent">
-                                    <asp:Label runat="server" ID="lblMsgNoSelectedforAssetBelongToStudent"></asp:Label>
-                                </div>
     
                                 <asp:Label runat="server" ID="lblAssetBelongToStudent"></asp:Label>
 
@@ -251,7 +249,9 @@
                                 </asp:RadioButtonList>
 
                                 
-                                <asp:CheckBox runat="server" ID="chkStartFoundProcess"/>
+                                <div class="alert alert-info" runat="server" id="divMsgNoSelectedForAssetBelongToStudent">
+                                    <asp:Label runat="server" ID="lblMsgNoSelectedforAssetBelongToStudent"></asp:Label>
+                                </div>
 
                                 <span runat="server" id="spNewTag">
                                     Will this asset be assigned a new Tag ID?
@@ -332,7 +332,7 @@
 					        Text="Submit" 
 					        CssClass="btn btn-default" 
 					        OnClick="btnSubmitFollowup_Click" 
-					        OnClientClick="return confirm('Are you sure you want to save these changes?')"
+					        OnClientClick="return ValidateUploadDocument();"
 					        CausesValidation="true" 
 					        ValidationGroup="vgSubmitFollowup" 
 					        runat="server" />
@@ -348,5 +348,52 @@
         </div>
 	</div>
     <!-- END FOLLOWUP  MODAL -->
+
+
+    <!-- MARK RECEIVED Bootstrap Modal Dialog -->
+    <div class="modal fade" id="popupStartFoundProcessModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-class">
+            <div class="panel panel-info" runat="server" id="Div1">
+
+                <div class="panel-heading">
+                    <button type="button" class="close" data-dismiss="modal"><span class="material-icons">cancel</span></button>
+                    <h4 class="modal-title">
+                        <asp:Label ID="Label1" runat="server" Text="Start Found Process" />
+                    </h4>
+                </div>
+
+                <div class="panel-body">
+                    Do you want to start the “Found Process” for the previously unidentified asset in hand?
+                </div>
+
+                <div class="modal-footer">
+                    
+                    <asp:Button 
+                        ID="btnStartFoundProcess" 
+                        Text="Yes" 
+                        CssClass="btn btn-default"
+                        OnClick="btnStartFoundProcess_Click" 
+                        runat="server" />
+                   
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+
+                </div>
+
+            </div>
+        </div>
+            
+    </div>
+
+    <script>
+        function ValidateUploadDocument() {
+            var fuData = document.getElementById("cph_Body_uc_AddAttachment_Followup_FileUploadAttachment");
+            var FileUploadPath = fuData.value;
+            if (FileUploadPath != '') {
+                alert("You selected a file but did not upload. Please upload your document before submitting.");
+                return false;
+            }
+            return confirm('Are you sure you want to save these changes?');
+        }
+    </script>
 
 </asp:Content>

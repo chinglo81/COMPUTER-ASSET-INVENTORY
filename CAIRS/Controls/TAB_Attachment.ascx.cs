@@ -22,6 +22,7 @@ namespace CAIRS.Controls
                 hdnStudentID.Value = value;
             }
         }
+
         public string GetSetAssetID
         {
             get
@@ -85,11 +86,15 @@ namespace CAIRS.Controls
                 filetype = fileUploadType;
             }
 
-            DataSet ds = DatabaseUtilities.DsValidateDuplicateAttachmentName(asset_id, id, filename, filetype);
-            if (ds.Tables[0].Rows.Count > 0)
+            //only validate if a file has been attachched
+            if (!Utilities.isNull(filetype))
             {
-                hasDuplicate = true;
-                cvDuplicateName.IsValid = false;
+                DataSet ds = DatabaseUtilities.DsValidateDuplicateAttachmentName(asset_id, id, filename, filetype);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    hasDuplicate = true;
+                    cvDuplicateName.IsValid = false;
+                }
             }
             
             return hasDuplicate;
@@ -108,6 +113,28 @@ namespace CAIRS.Controls
             return IsValid;
         }
 
+        private bool ValidateFileSize()
+        {
+            bool IsValid = true;
+            if (FileUploadAttachment.HasFile)
+            {
+                HttpPostedFile file = (HttpPostedFile)(FileUploadAttachment.PostedFile);
+
+                int iMaxFileSIze = int.Parse(Utilities.GetAppSettingFromConfig("MAX_FILE_SIZE_UPLOAD"));
+
+                int iFileSize = file.ContentLength;
+                if (iFileSize > iMaxFileSIze)
+                {
+                    IsValid = false;
+                }
+
+            }
+
+            cvUploadFileSize.IsValid = IsValid;
+
+            return IsValid;
+        }
+
         protected bool IsInsert()
         {
             return ASSET_ATTACHMENT_ID.Equals("-1");
@@ -118,14 +145,24 @@ namespace CAIRS.Controls
             ScriptManager.RegisterStartupScript(Page, Page.GetType(), "popupDetailMessage", "$('#popupAttachmentDetails').modal();", true);
             if (isReload)
             {
+                //Load attachment type
+                ddlAttachmentType.LoadddlAttachmentType(true, true, false); 
+                LoadStudentAssetTransactionDDL();
                 LoadAttachment(ASSET_ATTACHMENT_ID);
             }
+            divTamperInfo.Visible = false;
             reqFile.Visible = true;
             string title = "Add Attachment";
             if (!IsInsert())
             {
                 title = "Edit Attachment";
                 reqFile.Visible = false; //Not required on edit
+                divTamperInfo.Visible = true;
+                divStudentTamperInfo.Visible = false;
+                if (lblIsTampered.Text.ToLower().Trim().Equals("yes"))
+                {
+                    divStudentTamperInfo.Visible = true;
+                }
             }
             lblModalTitle.Text = title;
         }
@@ -161,6 +198,14 @@ namespace CAIRS.Controls
         {
             DataSet ds = DatabaseUtilities.DsGetTabByView(Constants.DB_VIEW_ASSET_TAB_ATTACHMENTS, GetSetAssetID, id, "");
             Utilities.DataBindForm(divAssetAttachmentInfo, ds);
+
+            //need to set the hidden value for file type to validate duplicate file name
+            string filetype = "";
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                filetype = ds.Tables[0].Rows[0]["File_Type_Desc"].ToString();
+            }
+            hdnFileType.Value = filetype;
         }
 
         public void LoadAttachmentDG()
@@ -180,6 +225,25 @@ namespace CAIRS.Controls
             }
         }
 
+        private void LoadStudentAssetTransactionDDL()
+        {
+            DataSet ds = DatabaseUtilities.DsGetTabByView(Constants.DB_VIEW_ASSET_TAB_ASSIGNMENT, GetSetAssetID, "", "");
+
+            divAssetStudentTransactionInfo.Visible = false;
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                divAssetStudentTransactionInfo.Visible = true;
+
+                ddlAssetStudentTransaction.DataSource = ds;
+                ddlAssetStudentTransaction.DataValueField = "ID";
+                ddlAssetStudentTransaction.DataTextField = "Display_Name";
+                ddlAssetStudentTransaction.DataBind();
+
+                ddlAssetStudentTransaction.Items.Insert(0, new ListItem("--- No Related Student Transaction ---", "-1"));
+            }
+        }
+
         private void SaveAttachment()
         {
             string filename = txtNameEdit.Text;
@@ -193,9 +257,11 @@ namespace CAIRS.Controls
             string date = DateTime.Now.ToString();
 
             string p_ID = ASSET_ATTACHMENT_ID;
+            string p_Asset_Student_Transaction_ID = Constants.MCSDBNULL;
             string p_Asset_ID = GetSetAssetID;
             string p_Student_ID = Constants.MCSDBNOPARAM;
             string p_Asset_Tamper_ID = Constants.MCSDBNOPARAM;
+            string p_Attachment_Type_ID = ddlAttachmentType.SelectedValue;
 
             if (!Utilities.isNull(GetSetStudentID))
             {
@@ -215,6 +281,16 @@ namespace CAIRS.Controls
             string p_Modified_By_Emp_ID = Constants.MCSDBNOPARAM;
             string p_Date_Modifed = Constants.MCSDBNOPARAM;
 
+            //only associate the attachment if the div is visible
+            if (divAssetStudentTransactionInfo.Visible)
+            {
+                string selected_value = ddlAssetStudentTransaction.SelectedValue;
+                if (!selected_value.Equals("-1"))
+                {
+                    p_Asset_Student_Transaction_ID = selected_value;
+                }
+            }
+
             if (IsInsert())
             {
                 p_Added_By_Emp_ID = logonempid;
@@ -230,13 +306,16 @@ namespace CAIRS.Controls
             //must check to see if the file name on server still matches before saving
             string filenametype = filename + '.' + filetype;
             UploadFileToServer(GetSetAssetID, ASSET_ATTACHMENT_ID, filenametype);
+
             
             //Saving Database changes
             DatabaseUtilities.Upsert_Asset_Attachment(
                 p_ID,
+                p_Asset_Student_Transaction_ID,
                 p_Asset_ID,
                 p_Student_ID,
                 p_Asset_Tamper_ID,
+                p_Attachment_Type_ID,
                 p_File_Type_ID,
                 p_Name,
                 p_Description,
@@ -325,7 +404,7 @@ namespace CAIRS.Controls
 
         protected void btnSaveAttachment_Click(object sender, EventArgs e)
         {
-            if (ValidateSaveAttachment() && Page.IsValid)
+            if (ValidateSaveAttachment() && ValidateFileSize() && Page.IsValid)
             {
                 SaveAttachment();
                 LoadAttachmentDG();

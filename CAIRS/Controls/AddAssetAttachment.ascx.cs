@@ -39,7 +39,6 @@ namespace CAIRS.Controls
                 hdnAssetTamperID.Value = value;
             }
         }
-
         public string GetAttachmentXML()
         {
             StringBuilder sb = new StringBuilder();
@@ -48,14 +47,17 @@ namespace CAIRS.Controls
             if (ds.Tables[0].Rows.Count > 0)
             {
                 sb.Append("<Attachments>");
+
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     sb.Append("<Attachment>");
-                        sb.Append("<File_Type_Desc>" + row["File_Type"].ToString() + "</File_Type_Desc>");
-                        sb.Append("<Name>" + row["File_Name"].ToString() + "</Name>");
-                        sb.Append("<Description>" + row["File_Desc"].ToString() + "</Description>");
+                    foreach (DataColumn c in ds.Tables[0].Columns)
+                    {
+                        sb.Append("<" + c.ColumnName + ">" + row[c.ColumnName].ToString() + "</" + c.ColumnName + ">");
+                    }
                     sb.Append("</Attachment>");
                 }
+
                 sb.Append("</Attachments>");
             }
 
@@ -102,7 +104,7 @@ namespace CAIRS.Controls
             txtDescription.Text = "";
             txtFileName.Text = "";
             FileUploadAttachment.Dispose();
-            chkAddAttachment.Checked = false;
+            //chkAddAttachment.Checked = false;
             dgAttachment.DataSource = null;
             dgAttachment.DataBind();
         }
@@ -115,12 +117,14 @@ namespace CAIRS.Controls
             DataTable table = ds.Tables.Add();
 
             //-- Add columns to the data table
-            table.Columns.Add("Asset_ID"     , typeof(string));
             table.Columns.Add("Attachment_ID", typeof(string));
-            table.Columns.Add("File_Name"    , typeof(string));
-            table.Columns.Add("File_Type"    , typeof(string));
-            table.Columns.Add("File_Desc"    , typeof(string));
-            table.Columns.Add("File_Path"    , typeof(string));
+            table.Columns.Add("Asset_ID", typeof(string));
+            table.Columns.Add("File_Name", typeof(string));
+            table.Columns.Add("File_Type", typeof(string));
+            table.Columns.Add("File_Desc", typeof(string));
+            table.Columns.Add("File_Path", typeof(string));
+            table.Columns.Add("Attachment_Type_ID", typeof(string));
+            table.Columns.Add("Attachment_Type_Desc", typeof(string));
 
             int iIDBuilder = 0;
 
@@ -134,10 +138,12 @@ namespace CAIRS.Controls
                 string FileType = lbl.Attributes["File_Type"].ToString();
                 string FileDesc = lbl.Attributes["File_Desc"].ToString();
                 string FilePath = lbl.Attributes["File_Path"].ToString();
+                string Attachment_Type_ID = lbl.Attributes["Attachment_Type_ID"].ToString();
+                string Attachment_Type_Desc = lbl.Attributes["Attachment_Type_Desc"].ToString();
 
                 //used to build unique ID
                 iIDBuilder = iIDBuilder + 1;
-                table.Rows.Add(Asset_ID, iIDBuilder, FileName, FileType, FileDesc, FilePath);
+                table.Rows.Add(iIDBuilder, Asset_ID, FileName, FileType, FileDesc, FilePath, Attachment_Type_ID, Attachment_Type_Desc);
             }
 
             if (isAdd)
@@ -146,9 +152,12 @@ namespace CAIRS.Controls
                 string p_FileType = Utilities.GetFileTypeFromUploadControl(FileUploadAttachment);
                 string p_FileDesc = txtDescription.Text;
                 string p_FilePath = Temp_Folder_Location() + "\\" + p_FileName + "." + p_FileType; //FileUploadAttachment.PostedFile.FileName;
+                string p_Attachment_Type_ID = ddlAttachmentType.SelectedValue;
+                string p_Attachment_Type_Desc = ddlAttachmentType.SelectedText;
+
                 if (!Utilities.isNull(GetSetAssetID) && !Utilities.isNull(p_FileName))
                 {
-                    table.Rows.Add(GetSetAssetID, iIDBuilder + 1, p_FileName, p_FileType, p_FileDesc, p_FilePath);
+                    table.Rows.Add(iIDBuilder + 1, GetSetAssetID, p_FileName, p_FileType, p_FileDesc, p_FilePath, p_Attachment_Type_ID, p_Attachment_Type_Desc);
                 }
             }
 
@@ -229,6 +238,27 @@ namespace CAIRS.Controls
             return hasDuplicate;
         }
 
+        private bool ValidateFileSize()
+        {
+            bool IsValid = true;
+            if (FileUploadAttachment.HasFile) { 
+                HttpPostedFile file = (HttpPostedFile)(FileUploadAttachment.PostedFile);
+
+                int iMaxFileSIze = int.Parse(Utilities.GetAppSettingFromConfig("MAX_FILE_SIZE_UPLOAD"));
+
+                int iFileSize = file.ContentLength;
+                if (iFileSize > iMaxFileSIze)
+                {
+                    IsValid = false;
+                }
+
+            }
+
+            cVUploadFileSize.IsValid = IsValid;
+
+            return IsValid;
+        }
+
         private void UploadFileTempLocation()
         {
             string file_name = txtFileName.Text;
@@ -262,7 +292,6 @@ namespace CAIRS.Controls
         {
             if (!Page.IsPostBack)
             {
-                lblAddAttachment.Attributes.Add("for", chkAddAttachment.ClientID);
                 //Needed for control to function properly when this control is used twice on a page.
                 string vg = ValidationGroupAdd + this.ID.ToString();
                 reqName.ValidationGroup = vg;
@@ -270,7 +299,13 @@ namespace CAIRS.Controls
                 cvDuplicateName.ValidationGroup = vg;
                 reqFile.ValidationGroup = vg;
                 regExFileType.ValidationGroup = vg;
-                btnAddAttachment.ValidationGroup = vg;    
+                btnAddAttachment.ValidationGroup = vg;
+
+                //Load attachment type
+                ddlAttachmentType.LoadddlAttachmentType(true, true, false);
+
+                ddlAttachmentType.ValidationGroup = vg;
+
             }
 
             ApplySecurityToControl();
@@ -278,7 +313,7 @@ namespace CAIRS.Controls
 
         protected void btnAddAttachment_Click(object sender, EventArgs e)
         {
-            if (!hasDuplicateFileName() && Page.IsValid)
+            if (!hasDuplicateFileName() && ValidateFileSize() && Page.IsValid)
             {
                 //upload file to temp location
                 UploadFileTempLocation();
@@ -296,6 +331,7 @@ namespace CAIRS.Controls
                 txtDescription.Text = "";
                 txtFileName.Text = "";
 
+                ddlAttachmentType.ddlAttachmentType.SelectedIndex = 0; //Reset index back to the first option
             }
 
             if (AddAttachment_Click != null)
@@ -311,7 +347,7 @@ namespace CAIRS.Controls
 
             DeleteAttachment(id, temp_file_path);
 
-            updateAttachment.Update();
+            //updateAttachment.Update();
 
             if (Delete_Click != null)
             {

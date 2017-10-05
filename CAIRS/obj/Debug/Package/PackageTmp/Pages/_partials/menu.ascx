@@ -15,14 +15,23 @@
         <li><asp:HyperLink runat="server" ID="hypLinkReports" NavigateUrl="~/Pages/AssetReportPage.aspx">Reports</asp:HyperLink></li>
 	</ul>
 
+    <%--CAIRS Documentation--%>
+    <div class="nav-drawer-header">CAIRS</div>
+
+    <ul class="nav-drawer-menu">
+        <li><asp:LinkButton runat="server" ID="lnkBtnUserGuide" Text="User Guide" OnClick="lnkBtnUserGuide_Click"></asp:LinkButton></li>
+        <li style="display:none;"><asp:HyperLink runat="server" ID="hypFAQs" NavigateUrl="~/Pages/FAQPage.aspx">FAQs</asp:HyperLink></li>
+    </ul>
+
 	<%--Barcode Scanner Documentation--%>
 	<div class="nav-drawer-header">Barcode Scanner</div>
 
 	<ul class="nav-drawer-menu">
-        <li><asp:LinkButton runat="server" ID="lnkBtnUserGuide" Text="User Guide" OnClick="lnkBtnUserGuide_Click"></asp:LinkButton></li>
 		<li><asp:LinkButton runat="server" ID="lnkBtnDocumentProgramBarcode" Text="How-to Program" OnClick="lnkBtnDocumentProgramBarcode_Click"></asp:LinkButton></li>
 		<li><asp:LinkButton runat="server" ID="lnkBtnDocumentBarcodeManual" Text="User Manual" OnClick="lnkBtnDocumentBarcodeManual_Click"></asp:LinkButton></li>
 	</ul>
+
+    
 
 </nav>
 <div class="nav-drawer-mask"></div>

@@ -2,6 +2,7 @@
 
 <%@ Register Src="~/Controls/DDL_RepairType.ascx" TagName="DDL_REPAIR_TYPE" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/DDL_AssetDisposition.ascx" TagName="DDL_Disposition" TagPrefix="UC" %>
+<%@ Register Src="~/Controls/DDL_AssetCondition.ascx" TagName="DDL_AssetCondition" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/TXT_Date.ascx" TagName="TXT_DATE" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/DDL_Bin.ascx" TagName="DDL_Bin" TagPrefix="UC" %>
 
@@ -242,9 +243,16 @@
 
                         <div class="panel-body">
 
-                            <UC:DDL_Disposition runat="server" ID="ddlDisposition_MarkReceived" IsAssetDispositionRequired="true" ValidationGroup="vgMarkReceived" />
-                        
+                            <UC:DDL_Disposition runat="server" ID="ddlDisposition_MarkReceived" IsAssetDispositionRequired="true" ValidationGroup="vgMarkReceived" AutoPostBack="true" />
+
+                            <br />
+                            <br />
+
+                            <UC:DDL_AssetCondition runat="server" ID="ddlCondition_MarkReceived" IsAssetConditionRequired="true" ValidationGroup="vgMarkReceived"  />
+
                         </div>
+
+
 
                         <div class="modal-footer">
                     

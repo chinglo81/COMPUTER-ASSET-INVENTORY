@@ -220,24 +220,6 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divUnidentifiedFollowup;
         
         /// <summary>
-        /// divMsgNoSelectedForAssetBelongToStudent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMsgNoSelectedForAssetBelongToStudent;
-        
-        /// <summary>
-        /// lblMsgNoSelectedforAssetBelongToStudent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMsgNoSelectedforAssetBelongToStudent;
-        
-        /// <summary>
         /// lblAssetBelongToStudent control.
         /// </summary>
         /// <remarks>
@@ -265,13 +247,22 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.WebControls.RadioButtonList radLstAssetBelongToStudent;
         
         /// <summary>
-        /// chkStartFoundProcess control.
+        /// divMsgNoSelectedForAssetBelongToStudent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkStartFoundProcess;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMsgNoSelectedForAssetBelongToStudent;
+        
+        /// <summary>
+        /// lblMsgNoSelectedforAssetBelongToStudent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMsgNoSelectedforAssetBelongToStudent;
         
         /// <summary>
         /// spNewTag control.
@@ -407,5 +398,32 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmitFollowup;
+        
+        /// <summary>
+        /// Div1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1;
+        
+        /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
+        /// btnStartFoundProcess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnStartFoundProcess;
     }
 }

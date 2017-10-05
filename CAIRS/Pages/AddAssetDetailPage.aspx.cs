@@ -108,15 +108,39 @@ namespace CAIRS.Pages
 
 		}
 
+        protected void DDLLoadBaseType()
+        {
+            ddlBaseType.IsAssetBaseTypeRequired = true;
+            ddlBaseType.LoadDDLAssetBaseType(false, true, false);
+            ddlBaseType.AutoPostBack = true;
+        }
+
 		/// <summary>
 		/// Initial Load
 		/// </summary>
 		/// </summary>
 		protected void DDLLoadAssetType()
 		{
+            string selectedBaseType = ddlBaseType.SelectedValue;
+           
 			ddlAssetType.IsAssetTypeRequired = true;
-			ddlAssetType.LoadDDLAssetType(Constants._OPTION_ALL_VALUE, true, true, false);
+            ddlAssetType.LoadDDLAssetType(selectedBaseType, true, true, false);
 			ddlAssetType.AutoPostBack = false;
+
+            if (selectedBaseType.Contains("-"))
+            {
+                ddlAssetType.ddlAssetType.Items.Clear();
+                ddlAssetType.ddlAssetType.Items.Insert(0, new ListItem("--- Select Base Type to Populate ---", "-1"));
+            }
+
+            bool isBaseTypePowerAdapter = selectedBaseType.Equals("3");
+
+            serialNumberTemp.Visible = !isBaseTypePowerAdapter;
+            txt_SerialNum.IsSerialNumRequired = !isBaseTypePowerAdapter;
+            reqSerialNumberTemp.Visible = !isBaseTypePowerAdapter;
+
+            updatePanelSerialNumber.Update();
+
 		}
 
 		/// <summary>
@@ -138,7 +162,7 @@ namespace CAIRS.Pages
 		/// </summary>
 		private void TXTSerialNumLoad()
 		{
-			txt_SerialNum.IsSerialNumRequired = true;
+			txt_SerialNum.IsSerialNumRequired = false;
 		}
 
 		/// <summary>
@@ -157,7 +181,7 @@ namespace CAIRS.Pages
 		{
 			ddlBin.IsBinRequired = false;
 			ddlBin.LoadDDLBin(SELECT_SITE, true, true, true, false);
-			ddlBin.AutoPostBack = true;
+			//ddlBin.AutoPostBack = true;
 		}
 
 		/// <summary>
@@ -175,6 +199,7 @@ namespace CAIRS.Pages
 				string sitecode = ds.Tables[0].Rows[0]["Asset_Site_Code"].ToString();
 				string description = ds.Tables[0].Rows[0]["Description"].ToString();
 				string bin = ds.Tables[0].Rows[0]["Bin_ID"].ToString();
+                string asset_base_type_id = ds.Tables[0].Rows[0]["Asset_Base_Type_ID"].ToString();
 				string assetType = ds.Tables[0].Rows[0]["Asset_Type_ID"].ToString();
 				string condition = ds.Tables[0].Rows[0]["Asset_Condition_ID"].ToString();
 				string disposition = ds.Tables[0].Rows[0]["Asset_Disposition_ID"].ToString();
@@ -182,7 +207,8 @@ namespace CAIRS.Pages
 				string hasSubmitted = ds.Tables[0].Rows[0]["Has_Submit"].ToString();
 				string date_purchased = ds.Tables[0].Rows[0]["Date_Purchased"].ToString();
 				string leased_term_days = ds.Tables[0].Rows[0]["Leased_Term_Days"].ToString();
-                string warranty_term_days = ds.Tables[0].Rows[0]["Warranty_Term_Days"].ToString();
+				string warranty_term_days = ds.Tables[0].Rows[0]["Warranty_Term_Days"].ToString();
+                
 
 				bool HasSubmit = false;
 
@@ -196,11 +222,14 @@ namespace CAIRS.Pages
 				txtDescriptionEdit.Text = description;
 				txtLeasedTermDays.Text = leased_term_days;
 				txtPurchasedDate.Text = date_purchased;
-                txtWarrantyTermDays.Text = warranty_term_days;
+				txtWarrantyTermDays.Text = warranty_term_days;
 
 				DDLLoadBin();
 
 				ddlBin.SelectedValue = bin;
+                ddlBaseType.SelectedValue = asset_base_type_id;
+                //reload asset type base on selected base type
+                DDLLoadAssetType();
 				ddlAssetType.SelectedValue = assetType;
 				ddlAssetCondition.SelectedValue = condition;
 
@@ -262,7 +291,7 @@ namespace CAIRS.Pages
 			//Bin
 			DDL_BinEditAsset.IsBinRequired = false;
 			DDL_BinEditAsset.LoadDDLBin(SELECT_SITE, true, true, true, false);
-			DDL_BinEditAsset.AutoPostBack = true;
+			//DDL_BinEditAsset.AutoPostBack = true;
 
 			//Asset Type
 			DDL_AssetTypeEditAsset.IsAssetTypeRequired = true;
@@ -299,13 +328,17 @@ namespace CAIRS.Pages
 			string sHeaderID = qsHeaderID;
 			string sTagID = txt_TagID.Text;
 			string sSerialNumber = txt_SerialNum.Text;
-			string sBinId = ddlBin.SelectedValue;
-            string sIsLeased = "0";
-            string sSelectedType = ddlAssetType.SelectedValue;
-            if (chkIsLeased.Checked)
+            if (ddlBaseType.SelectedValue.Equals("3"))
             {
-                sIsLeased = "1";
+                sSerialNumber = sTagID;
             }
+			string sBinId = ddlBin.SelectedValue;
+			string sIsLeased = "0";
+			string sSelectedType = ddlAssetType.SelectedValue;
+			if (chkIsLeased.Checked)
+			{
+				sIsLeased = "1";
+			}
 
 			string sErrorMsg = Utilities.ValidateOnAddAssetToTemp(sHeaderID, sTagID, sSerialNumber, sBinId, sIsLeased, sSelectedType);
 
@@ -339,7 +372,7 @@ namespace CAIRS.Pages
 			string p_ID = "-1";//Negative one (-1) indicates insert for upsert stored proc
 			string p_Asset_Temp_Header_ID = qsHeaderID;
 			string p_Tag_ID = txt_TagID.Text;
-            string p_Asset_Disposition_ID = "5"; //Available
+			string p_Asset_Disposition_ID = "5"; //Available
 			string p_Asset_Condition_ID = ddlAssetCondition.SelectedValue;
 			string p_Asset_Type_ID = ddlAssetType.SelectedValue;
 			string p_Asset_Assignment_Type_ID = "1"; //1 for student
@@ -355,15 +388,19 @@ namespace CAIRS.Pages
 			}
 
 			string p_Serial_Number = txt_SerialNum.Text;
+            if (!serialNumberTemp.Visible)
+            {
+                p_Serial_Number = p_Tag_ID;
+            }
 			string p_Date_Purchased = txtPurchasedDate.Text;
 			string p_Is_Leased = Utilities.ConvertCheckBoxToBitField(chkIsLeased);
 			string p_Leased_Term_Days = Constants.MCSDBNULL;
-            string p_Warranty_Term_Days = Utilities.ConvertStringToDBNull(txtWarrantyTermDays.Text);
+			string p_Warranty_Term_Days = Utilities.ConvertStringToDBNull(txtWarrantyTermDays.Text);
 
 			if (chkIsLeased.Checked)
 			{
 				p_Leased_Term_Days = txtLeasedTermDays.Text.Trim();
-				
+
 			}
 
 			DatabaseUtilities.Upsert_Asset_Temp_Detail(
@@ -379,80 +416,80 @@ namespace CAIRS.Pages
 				p_Date_Purchased,
 				p_Is_Leased,
 				p_Leased_Term_Days,
-                p_Warranty_Term_Days,
+				p_Warranty_Term_Days,
 				p_Date_Added,
 				p_Added_By_Emp_ID
 			);
 		}
 
-        private void SaveEditDetailByID(string p_ID)
-        {
-            //Default to no param
-            string p_Asset_Temp_Header_ID = Constants.MCSDBNOPARAM;
-            string p_Tag_ID = Constants.MCSDBNOPARAM;
-            string p_Asset_Assignment_Type_ID = Constants.MCSDBNOPARAM;
-            string p_Serial_Number = Constants.MCSDBNOPARAM;
-            string p_Date_Purchased = Constants.MCSDBNOPARAM;
-            string p_Asset_Disposition_ID = "5"; //Default to Available 
-            string p_Asset_Condition_ID = Constants.MCSDBNOPARAM;
-            string p_Asset_Type_ID = Constants.MCSDBNOPARAM;
-            string p_Is_Leased = Constants.MCSDBNOPARAM;
-            string p_Leased_Term_Days = Constants.MCSDBNOPARAM;
-            string p_Warranty_Term_Days = Constants.MCSDBNOPARAM;
+		private void SaveEditDetailByID(string p_ID)
+		{
+			//Default to no param
+			string p_Asset_Temp_Header_ID = Constants.MCSDBNOPARAM;
+			string p_Tag_ID = Constants.MCSDBNOPARAM;
+			string p_Asset_Assignment_Type_ID = Constants.MCSDBNOPARAM;
+			string p_Serial_Number = Constants.MCSDBNOPARAM;
+			string p_Date_Purchased = Constants.MCSDBNOPARAM;
+			string p_Asset_Disposition_ID = "5"; //Default to Available 
+			string p_Asset_Condition_ID = Constants.MCSDBNOPARAM;
+			string p_Asset_Type_ID = Constants.MCSDBNOPARAM;
+			string p_Is_Leased = Constants.MCSDBNOPARAM;
+			string p_Leased_Term_Days = Constants.MCSDBNOPARAM;
+			string p_Warranty_Term_Days = Constants.MCSDBNOPARAM;
 
-            //Bin is always visible
-            string p_Bin_ID = DDL_BinEditAsset.SelectedValue;
-            //No Option was selected
-            if (p_Bin_ID.Contains("-"))
-            {
-                p_Bin_ID = Constants.MCSDBNULL;
-            }
+			//Bin is always visible
+			string p_Bin_ID = DDL_BinEditAsset.SelectedValue;
+			//No Option was selected
+			if (p_Bin_ID.Contains("-"))
+			{
+				p_Bin_ID = Constants.MCSDBNULL;
+			}
 
-            //Auditing fields
-            string p_Date_Added = DateTime.Now.ToString();
-            string p_Added_By_Emp_ID = Utilities.GetEmployeeIdByLoggedOn(LoggedOnUser);
+			//Auditing fields
+			string p_Date_Added = DateTime.Now.ToString();
+			string p_Added_By_Emp_ID = Utilities.GetEmployeeIdByLoggedOn(LoggedOnUser);
 
-            //Check edit mode
-            string sIsedit = hdnIsEditAssetTemp.Value;
-            bool isEdit = false;
-            if (!isNull(sIsedit))
-            {
-                isEdit = bool.Parse(sIsedit);
-            }
+			//Check edit mode
+			string sIsedit = hdnIsEditAssetTemp.Value;
+			bool isEdit = false;
+			if (!isNull(sIsedit))
+			{
+				isEdit = bool.Parse(sIsedit);
+			}
 
-            //If Edit update fields
-            if (isEdit)
-            {
-                p_Asset_Condition_ID = DDL_AssetConditionEditAsset.SelectedValue;
-                p_Asset_Type_ID = DDL_AssetTypeEditAsset.SelectedValue;
-                p_Is_Leased = Utilities.ConvertCheckBoxToBitField(chkIsLeasedEditAsset);
-                p_Date_Purchased = txtPurchasedDateEditAsset.Text;
-                p_Warranty_Term_Days = Utilities.ConvertStringToDBNull(txtWarrantyTermDaysEditAsset.Text);
+			//If Edit update fields
+			if (isEdit)
+			{
+				p_Asset_Condition_ID = DDL_AssetConditionEditAsset.SelectedValue;
+				p_Asset_Type_ID = DDL_AssetTypeEditAsset.SelectedValue;
+				p_Is_Leased = Utilities.ConvertCheckBoxToBitField(chkIsLeasedEditAsset);
+				p_Date_Purchased = txtPurchasedDateEditAsset.Text;
+				p_Warranty_Term_Days = Utilities.ConvertStringToDBNull(txtWarrantyTermDaysEditAsset.Text);
 
-                if (chkIsLeasedEditAsset.Checked)
-                {
-                    p_Leased_Term_Days = txtLeasedTermEditAsset.Text.Trim();
-                }
-            }
+				if (chkIsLeasedEditAsset.Checked)
+				{
+					p_Leased_Term_Days = txtLeasedTermEditAsset.Text.Trim();
+				}
+			}
 
-            DatabaseUtilities.Upsert_Asset_Temp_Detail(
-                p_ID,
-                p_Asset_Temp_Header_ID,
-                p_Tag_ID,
-                p_Asset_Disposition_ID,
-                p_Asset_Condition_ID,
-                p_Asset_Type_ID,
-                p_Asset_Assignment_Type_ID,
-                p_Bin_ID,
-                p_Serial_Number,
-                p_Date_Purchased,
-                p_Is_Leased,
-                p_Leased_Term_Days,
-                p_Warranty_Term_Days,
-                p_Date_Added,
-                p_Added_By_Emp_ID
-            );
-        }
+			DatabaseUtilities.Upsert_Asset_Temp_Detail(
+				p_ID,
+				p_Asset_Temp_Header_ID,
+				p_Tag_ID,
+				p_Asset_Disposition_ID,
+				p_Asset_Condition_ID,
+				p_Asset_Type_ID,
+				p_Asset_Assignment_Type_ID,
+				p_Bin_ID,
+				p_Serial_Number,
+				p_Date_Purchased,
+				p_Is_Leased,
+				p_Leased_Term_Days,
+				p_Warranty_Term_Days,
+				p_Date_Added,
+				p_Added_By_Emp_ID
+			);
+		}
 
 		/// <summary>
 		/// Initial Control after loading. This is used for scanning so the user can move to the next scan without any key strokes
@@ -510,17 +547,17 @@ namespace CAIRS.Pages
 			txt_SerialNum.Text = "";
 			txt_TagID.Text = "";
 			//lblCapacityMessage.Text = "";
-			serialNumberTemp.Value = "";
-			tagIDTemp.Value = "";
+			serialNumberTemp.Text = "";
+			tagIDTemp.Text = "";
 		}
 
 		private bool ValidateIsAtLeastOneItemCheck()
 		{
-            int iCountOfSelectedItemInGrid = Utilities.GetCountOfCheckItemInInDatagrid(dgTempAsset, "chkAsset");
+			int iCountOfSelectedItemInGrid = Utilities.GetCountOfCheckItemInInDatagrid(dgTempAsset, "chkAsset");
 
-            hdnSelectedCapacityEditAssetTemp.Value = iCountOfSelectedItemInGrid.ToString();
+			hdnSelectedCapacityEditAssetTemp.Value = iCountOfSelectedItemInGrid.ToString();
 
-            return iCountOfSelectedItemInGrid > 0;
+			return iCountOfSelectedItemInGrid > 0;
 		}
 
 		private void ClearEditAssetTempControl()
@@ -530,8 +567,8 @@ namespace CAIRS.Pages
 			DDL_AssetTypeEditAsset.ddlAssetType.SelectedIndex = 0;
 			DDL_AssetConditionEditAsset.ddlAssetCondition.SelectedIndex = 0;
 			chkIsLeasedEditAsset.Checked = false;
-            txtPurchasedDateEditAsset.Text = "";
-            txtWarrantyTermDaysEditAsset.Text = "";
+			txtPurchasedDateEditAsset.Text = "";
+			txtWarrantyTermDaysEditAsset.Text = "";
 		}
 
 		private void DisplayEditAsset()
@@ -547,8 +584,8 @@ namespace CAIRS.Pages
 			trEditAssetTemp_AssetCondition.Visible = isEdit;
 			trEditAssetTemp_AssetType.Visible = isEdit;
 			trEditAssetTemp_IsLeased.Visible = isEdit;
-            trEditAssetTemp_PurchasedDate.Visible = isEdit;
-            trEditAssetTemp_WarrantyTermDays.Visible = isEdit;
+			trEditAssetTemp_PurchasedDate.Visible = isEdit;
+			trEditAssetTemp_WarrantyTermDays.Visible = isEdit;
 
 			updatePanelEditAssetDetail.Update();
 
@@ -586,10 +623,10 @@ namespace CAIRS.Pages
 			string sHeaderID = qsHeaderID;
 
 			//string sErrorMsg = Utilities.ValidateOnSubmitAdd(sHeaderID);
-            bool isValidForSubmit = Utilities.ValidateOnSubmitAdd(sHeaderID);
+			bool isValidForSubmit = Utilities.ValidateOnSubmitAdd(sHeaderID);
 
 			//if (!isNull(sErrorMsg))
-            if (!isValidForSubmit)
+			if (!isValidForSubmit)
 			{
 				string msg = "Please fix the error(s) according to the grid before submitting.";
 				//Set Validation Group
@@ -727,7 +764,7 @@ namespace CAIRS.Pages
 		private void ShowHideLeasedInfo()
 		{
 			spLeasedTermDays.Visible = chkIsLeased.Checked;
-			updatePanelLeasedInfo.Update();
+			//updatePanelLeasedInfo.Update();
 		}
 
 		protected new void Page_Load(object sender, EventArgs e)
@@ -748,6 +785,7 @@ namespace CAIRS.Pages
 
 				PageIndex = "0";
 
+                DDLLoadBaseType();
 				DDLLoadAssetType();
 				DDLLoadAssetCondition();
 				TXTSerialNumLoad();
@@ -761,13 +799,20 @@ namespace CAIRS.Pages
 				//Apply security to control
 				ApplySecurityToControl();
 
+				tagIDTemp.Focus();
 			}
 
 			ddlBin.SelectedIndexChanged_DDL_Bin += SelectedIndexChangeDDLBin;
 			DDL_BinEditAsset.SelectedIndexChanged_DDL_Bin += SelectedIndexChangeDDLBinEdit;
-
+            ddlBaseType.SelectedIndexChanged_DDL_AssetBaseType += onSelectedIndexChange_ddlAssetBaseType;
 
 		}
+
+        protected void onSelectedIndexChange_ddlAssetBaseType(object sender, EventArgs e)
+        {
+            DDLLoadAssetType();
+            ddlBaseType.reqAssetBaseType.Validate(); //needs to validate this so to handle the recalculation of placeholder.
+        }
 
 		protected void SelectedIndexChangeDDLBin(object sender, EventArgs e)
 		{
@@ -819,7 +864,11 @@ namespace CAIRS.Pages
 				//btnClearForm.Visible = !IsSubmitted;
 				divAddDetailSection.Visible = !IsSubmitted;
 				chk.Visible = !IsSubmitted;
-				divHeaderGridInfo.Visible = !IsSubmitted;
+				//divHeaderGridInfo.Visible = !IsSubmitted;
+				chkAll.Visible = !IsSubmitted;
+				lnkBtnEditSelected.Visible = !IsSubmitted;
+				lnkBtnAssignBinAssetTempToBin.Visible = !IsSubmitted;
+				btnDeleteSelectedAsset.Visible = !IsSubmitted;
 
 				//Enable role of user is not director.
 				chk.Enabled = !AppSecurity.Current_User_Access_Level().Equals(AppSecurity.ROLE_DIRECTOR);
@@ -864,22 +913,16 @@ namespace CAIRS.Pages
 
 		protected void btnAddAsset_Click(object sender, EventArgs e)
 		{
-			//This is to handle when a user scans a barcode
-			string serial = txt_SerialNum.Text;
-			string tagid = txt_TagID.Text;
-
-			if (ValidateOnAddAsset() && Page.IsValid)
+			if (ValidateOnAddAsset())
 			{
 				SaveTempDetailTbl();
 				LoadAssetTempDG();
 				IntializeControlAfterAdd();
 				SelectedIndexChangeDDLBin(sender, e);
-			}
-			else
-			{
-				txt_SerialNum.Text = "";
-				txt_TagID.Text = "";
-				SetFocus(txt_SerialNum.txtSerialNumber);
+
+				//NavigateTo(Constants.PAGES_ADD_ASSET_DETAIL_PAGE + "?" + Request.QueryString.ToString(), false);
+				serialNumberTemp.Text = "";
+				tagIDTemp.Text = "";
 			}
 		}
 
@@ -907,11 +950,11 @@ namespace CAIRS.Pages
 		}
 
 		protected void btnSubmit_Click(object sender, EventArgs e)
-		{   
-            string headerid = qsHeaderID;
-            bool isValidForSubmit = Utilities.ValidateOnSubmitAdd(headerid);
+		{
+			string headerid = qsHeaderID;
+			bool isValidForSubmit = Utilities.ValidateOnSubmitAdd(headerid);
 
-            if (isValidForSubmit)
+			if (isValidForSubmit)
 			{
 				string submittedByDate = DateTime.Now.ToString();
 				string submittedByEmpID = Utilities.GetEmployeeIdByLoggedOn(LoggedOnUser);
@@ -935,7 +978,7 @@ namespace CAIRS.Pages
 			if (ValidateOnEditAssetTempDetail(selectedbin) && Page.IsValid)
 			{
 				SaveEditAssetDetailTemp();
-                ReDrawPopover();
+				ReDrawPopover();
 				DDLLoadBin();
 				LoadAssetTempDG();
 				chkAll.Checked = false;//initialize control
@@ -994,6 +1037,13 @@ namespace CAIRS.Pages
 			spEditAssetLeasedInfo.Visible = chkIsLeasedEditAsset.Checked;
 			txtLeasedTermEditAsset.Focus();
 			updatePanelEditAssetDetail.Update();
+		}
+
+		protected void lnkExportToExcel_Click(object sender, EventArgs e)
+		{
+			string file_name = "Add_Asset_Results";
+			DataSet ds = DatabaseUtilities.DsGetAssetTempHeaderDetailByHeaderIDForExport(qsHeaderID);
+			Utilities.ExportDataSetToExcel(ds, Response, file_name);
 		}
 
 	}

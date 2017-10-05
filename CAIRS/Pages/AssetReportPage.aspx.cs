@@ -26,6 +26,14 @@ namespace CAIRS.Pages
             }
         }
 
+        private string qsReportID
+        {
+            get
+            {
+                return Request.QueryString["Report_ID"];
+            }
+        }
+
         private void DisplayReportSQL(string report_id)
         {
             DataSet ds = DatabaseUtilities.DsGetByTableColumnValue(Constants.TBL_REPORTS, Constants.COLUMN_REPORTS_ID, report_id, "");
@@ -44,43 +52,6 @@ namespace CAIRS.Pages
 
                 SSRS_ReportViewer.ServerReport.ReportPath = "/" + sReportFolder + "/" + sReportName;
 
-                ReportParameterInfoCollection Ric = SSRS_ReportViewer.ServerReport.GetParameters();
-                int iParaCount = 0;
-                //get no of prameters to pass   
-                foreach (ReportParameterInfo Rpi in Ric)
-                {
-                    if (Rpi.Name.Equals("SecurityUsername"))
-                    {
-                        iParaCount++;
-                    }
-                    if (Rpi.Name.Equals("UseAdvSearch"))
-                    {
-                        iParaCount++;
-                    }
-                }
-                //if there are params to fill out then create correct sized param array and fill it      
-                if (iParaCount > 0)
-                {
-                    ReportParameter[] aParm = new ReportParameter[iParaCount];
-                    iParaCount = 0;
-                    foreach (ReportParameterInfo Rpi in Ric)
-                    {
-                        if (Rpi.Name.Equals("SecurityUsername"))
-                        {
-                            //If report uses the this standard security parameter then fill it with logged on user 
-                            // so report can check site security.
-                            aParm[iParaCount] = new ReportParameter(Rpi.Name, LoggedOnUser, false);
-                            iParaCount++;
-                        }
-                        if (Rpi.Name.Equals("UseAdvSearch"))
-                        {
-                            //If report uses the this standard advanced search parameter then fill it  
-                            aParm[iParaCount] = new ReportParameter(Rpi.Name, qsAdvSearch, true);
-                            iParaCount++;
-                        }
-                    }
-                    SSRS_ReportViewer.ServerReport.SetParameters(aParm);
-                }
                 SSRS_ReportViewer.PageCountMode = PageCountMode.Estimate;  //Use this to show actual or estimated page count
                 SSRS_ReportViewer.ServerReport.Refresh();
                 //failed attempt to set focus to the report control and away from the 'Retrieve Report' button
@@ -115,8 +86,14 @@ namespace CAIRS.Pages
             if (!IsPostBack)
             {
                 SSRS_ReportViewer.Visible = false;
-
                 LoadReportsDDL();
+
+                if (!isNull(qsReportID))
+                {
+                    ddlReports.SelectedValue = qsReportID;
+                    DisplayReportSQL(ddlReports.SelectedValue);
+                }
+
             }
         }
 

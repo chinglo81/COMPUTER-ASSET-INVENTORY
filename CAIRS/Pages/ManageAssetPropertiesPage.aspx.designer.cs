@@ -814,6 +814,24 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqDdlLawEnforcement;
         
         /// <summary>
+        /// txtCaseNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCaseNumber;
+        
+        /// <summary>
+        /// reqCaseNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqCaseNumber;
+        
+        /// <summary>
         /// txtOfficerFirstName control.
         /// </summary>
         /// <remarks>
@@ -850,33 +868,6 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqOfficerLastName;
         
         /// <summary>
-        /// txtCaseNumber control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCaseNumber;
-        
-        /// <summary>
-        /// reqCaseNumber control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqCaseNumber;
-        
-        /// <summary>
-        /// txtComment control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtComment;
-        
-        /// <summary>
         /// txtDatePickup control.
         /// </summary>
         /// <remarks>
@@ -902,6 +893,15 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblDateReturned;
+        
+        /// <summary>
+        /// txtComment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtComment;
         
         /// <summary>
         /// btnSaveLawEnforcement control.

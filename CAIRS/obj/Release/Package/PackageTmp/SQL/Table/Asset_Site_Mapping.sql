@@ -1,0 +1,10 @@
+USE Asset_Tracking
+
+CREATE TABLE Asset_Site_Mapping
+(
+	ID INT IDENTITY(1,1) PRIMARY KEY,
+	Asset_ID INT NOT NULL,
+	Site_ID INT Not NULL,
+	Added_By_Emp_ID VARCHAR(11) NOT NULL,
+	Date_Added DATETIME NOT NULL
+)

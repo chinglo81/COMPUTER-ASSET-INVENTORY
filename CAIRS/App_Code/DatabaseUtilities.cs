@@ -658,6 +658,33 @@ namespace CAIRS
                 );
         }
 
+        public static void SaveAssetDispositionAndCondition(string asset_id, string disposition_id, string condition_id, string logged_on_user)
+        {
+            Utilities.Assert(!Utilities.isNull(asset_id), "Asset ID is required");
+
+            string p_Modified_By_Emp_ID = Utilities.GetEmployeeIdByLoggedOn(logged_on_user);
+            string p_Date_Modified = DateTime.Now.ToString();
+
+            DatabaseUtilities.Upsert_Asset(
+                    asset_id,
+                    Constants.MCSDBNOPARAM,
+                    disposition_id,
+                    condition_id,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    Constants.MCSDBNOPARAM,
+                    p_Modified_By_Emp_ID,
+                    p_Date_Modified
+                );
+        }
+
         //Transfer Asset
         public static void SaveTransferAsset(string p_Asset_Search_ID, string p_Asset_ID, string p_Transfer_Site_ID, string p_Emp_ID, string p_Date)
         {
@@ -776,6 +803,66 @@ namespace CAIRS
 
             ExecuteStoredProcNoResults(Constants.STORED_PROC_SP_STU_CHECK_IN, arrNames, arrValues);
 		}
+
+        //Edit Student Check In
+        public static void EditStudentCheckIn(
+            string p_Asset_Student_Transaction_ID,
+            string p_Check_In_Type_ID,
+            string p_Disposition_ID,
+            string p_Check_In_Condition_ID,
+            string p_Stu_Responsible_For_Damage,
+            string p_Is_Police_Report_Provided,
+            string p_Comments,
+            string p_Edit_Reason,
+            string p_Emp_ID,
+            string p_Date
+        )
+        {
+            ArrayList arrNames = new ArrayList();
+            ArrayList arrValues = new ArrayList();
+
+            //Asset_Student_Transaction_ID
+            arrNames.Add("Asset_Student_Transaction_ID");
+            arrValues.Add(p_Asset_Student_Transaction_ID);
+
+            //Check_In_Type_ID
+            arrNames.Add("Check_In_Type_ID");
+            arrValues.Add(p_Check_In_Type_ID);
+
+            //Disposition ID
+            arrNames.Add("Disposition_ID");
+            arrValues.Add(p_Disposition_ID);
+
+            //Check_In_Condition_ID
+            arrNames.Add("Check_In_Condition_ID");
+            arrValues.Add(p_Check_In_Condition_ID);
+
+            //Stu_Responsible_For_Damage
+            arrNames.Add("Stu_Responsible_For_Damage");
+            arrValues.Add(p_Stu_Responsible_For_Damage);
+
+            //Is_Police_Report_Provided
+            arrNames.Add("Is_Police_Report_Provided");
+            arrValues.Add(p_Is_Police_Report_Provided);
+
+            //Comments
+            arrNames.Add("Comments");
+            arrValues.Add(p_Comments);
+
+            //Edit_Reason
+            arrNames.Add("Edit_Reason");
+            arrValues.Add(p_Edit_Reason);
+
+            //Emp ID
+            arrNames.Add("Emp_ID");
+            arrValues.Add(p_Emp_ID);
+
+            //Date
+            arrNames.Add("Date");
+            arrValues.Add(p_Date);
+
+            ExecuteStoredProcNoResults(Constants.STORED_PROC_SP_STU_CHECK_IN_EDIT, arrNames, arrValues);
+        }
 
         //Student Follow Up
         public static void StudentFollowUp(
@@ -1062,6 +1149,32 @@ namespace CAIRS
 			
 		}
 
+        public static DataSet DsGetAssetTempHeaderDetailByHeaderIDForExport(string sHeaderId)
+        {
+            Utilities.Assert(!Utilities.isNull(sHeaderId), "All paramter must be provided: database, table name");
+
+            string sSQL = @"DECLARE @Header_ID AS INT
+                            SET @Header_ID = " + sHeaderId + @"
+                            
+                            select 
+                                v.Tag_ID as 'Tag ID',
+	                            v.Serial_Number as 'Serial #',
+	                            v.Asset_Type_Name as 'Type',
+	                            v.Bin_Number as 'Bin',
+	                            v.Asset_Condition_Name as 'Condition',
+	                            v.Is_Leased as 'Leased',
+	                            v.Date_Purchased_Formatted as 'Purchased',
+	                            v.Leased_Term_Days as 'Lease Term',
+	                            v.Warranty_Term_Days as 'Warranty Term'
+
+                            from v_Asset_Temp_Header_Detail v
+                            where v.Header_ID = @Header_ID
+                            order by v.Date_Added desc
+                            ";
+
+            return ExecuteSQLStatement(sSQL);
+        }
+
 		public static DataSet DsGetAssetTempHeaderDetailByHeaderID(string sHeaderID)
 		{
             /* IMPORTANT Any validation added to this stored proc will need to be added to stored proc: 
@@ -1208,14 +1321,19 @@ namespace CAIRS
 		/// <param name="sWhereClause">Where Clause</param>
 		/// <param name="sOrder">Order By</param>
 		/// <returns></returns>
-		public static DataSet DsGetAssetMasterList(string sWhereClause, string sAsset_Search_ID)
+		public static DataSet DsGetAssetMasterList(string sWhereClause, string sAsset_Search_ID, string csv_columns_to_display)
 		{
+            if (Utilities.isNull(csv_columns_to_display))
+            {
+                csv_columns_to_display = @" v.*,
+								            isnull(d.Is_Checked, 0) as Is_Checked    
+                                        ";
+            }
             string sSQL = @"DECLARE @Asset_Search_ID int
                             SET @Asset_Search_ID = " + sAsset_Search_ID + @"
 
-                            select 
-								v.*,
-								isnull(d.Is_Checked, 0) as Is_Checked
+                            select " 
+						    + csv_columns_to_display + @"		
 							from v_Asset_Master_List v 
 							left join Asset_Search_Detail d
 								on d.Asset_ID = v.Asset_ID
@@ -1225,42 +1343,55 @@ namespace CAIRS
 			return ExecuteSQLStatement(sSQL);
 		}
 
-		public static DataSet DsGetStudentSearch(string student_ids, string sOrderBy)
+		public static DataSet DsGetStudentSearch(string student_ids, string asset_site, string base_type, string asset_type, string disposition_list, string order_by, bool is_excel_export)
 		{
-			string sSetStudentID = "";
-			string sWhereClause = "";
-			string sWhereUserAccessibleSite = "";
+            ArrayList arrNames = new ArrayList();
+            ArrayList arrValues = new ArrayList();
 
-			//Student ID(s)
-			if (!Utilities.isNull(student_ids))
-			{
-				sSetStudentID = " SET @StudentIDS = '" + student_ids + "' ";
-				sWhereClause = " AND v.Student_ID IN (SELECT * FROM dbo.CSVToTable(@StudentIDS,','))";
-			}
+            //Student IDs
+            arrNames.Add("StudentIDs");
+            arrValues.Add(student_ids);
 
-			//Read Only User
-			bool isReadOnlyUser = AppSecurity.Current_User_Access_Level().Equals(AppSecurity.ROLE_READ_ONLY);
-			if (isReadOnlyUser)
-			{
-				sWhereUserAccessibleSite = " AND v.Student_Current_School in (select Site_Code from dbo.GetUserSiteSecurity('" + Utilities.GetLoggedOnUser() + "')) ";
-			}
+            //Disposition_List
+            arrNames.Add("Disposition_List");
+            arrValues.Add(disposition_list);
 
-			//Sort
-			if (!Utilities.isNull(sOrderBy))
-			{
-				sOrderBy = " ORDER BY " + sOrderBy;
-			}
+            //Asset Site
+            arrNames.Add("Asset_Site");
+            arrValues.Add(asset_site);
 
-			string sSQL = @"DECLARE @StudentIDs as VARCHAR(MAX) " +
-							sSetStudentID + 
-						   @" SELECT * 
-							  FROM v_Student_Asset_Search v
-							  WHERE 1=1 "
-						   + sWhereClause
-						   + sWhereUserAccessibleSite
-						   + sOrderBy;
+            //Asset Base Type
+            arrNames.Add("Asset_Base_Type");
+            arrValues.Add(base_type);
 
-			return ExecuteSQLStatement(sSQL);
+            //Asset Type
+            arrNames.Add("Asset_Type");
+            arrValues.Add(asset_type);
+
+            string is_excel = "0";
+            if (is_excel_export)
+            {
+                is_excel = "1";
+            }
+
+            //Is_Excel_Export
+            arrNames.Add("Is_Excel_Export");
+            arrValues.Add(is_excel);
+
+            DataSet ds = ExecuteStoredProc(Constants.STORED_PROC_SP_GET_STUDENT_ASSET_SEARCH, arrNames, arrValues);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataView dv = new DataView(ds.Tables[0]);
+                dv.Sort = order_by;
+
+                DataSet dsNew = new DataSet();
+                dsNew.Tables.Add(dv.ToTable());
+
+                return dsNew;
+            }
+
+            return ds;
 		}
 
 		public static DataSet DsGetUserAccessibleStudentSearch(string student_ids)
@@ -1548,7 +1679,7 @@ namespace CAIRS
 				//Is Current user District tech role
 				bool isCurrentUserDistrictTech = AppSecurity.Current_User_Access_Level().Equals(AppSecurity.ROLE_DISTRICT_TECH);
 
-				//Apply security if not district tech
+				//Apply security if not district tech or site tech with access to all sites
 				if (!isCurrentUserDistrictTech)
 				{
                     innerJoinAccessibleSite = @" inner join Asset_Tracking.dbo.GetUserSiteSecurity('" + Utilities.GetLoggedOnUser() + @"') accessibleSite
@@ -1582,6 +1713,7 @@ namespace CAIRS
 								case when s.SasiSchoolNum = '999' then Graduated_SchoolId else s.SasiSchoolNum end as SasiSchoolNum,
 								sch.ShortName,
 								sch.Name + case when s.SasiSchoolNum = '999' then ' (' + gradSchool.Name + ')' else '' end as StudentSchoolName,
+                                sch.ShortName + case when s.SasiSchoolNum = '999' then ' (' + gradSchool.ShortName + ')' else '' end as StudentShortSchoolName,
                                 cur_sch.SasiSchoolNum as Current_Enroll_School_Num,
 	                            cur_sch.Name as Current_Enroll_School_Name,
                                 'Secondary Enrollment:&nbsp;' + cur_sch.Name + '<br/>' as Current_Enroll_School_Name_Display,
@@ -1589,6 +1721,7 @@ namespace CAIRS
 								case when s.DisabilityCode is null then 'No' else 'Yes' end as SpecialEd,
 								case when s.StudentStatus is null then 'Active' else 'Inactive' end as StudentStatusDesc,
 								case when coverage.ID is not null then 'Yes' else 'No' end as HasServiceInsuranceFee,
+                                case when coverage.Date_Paid is not null then 'Date Paid: <strong>' + Asset_Tracking.dbo.FormatDateTime(coverage.Date_Paid,'MM/DD/YYYY') + '</strong></br>'else '' end as Date_LTC_Paid_Html,
 								Asset_Tracking.dbo.FormatDateTime(s.BirthDate,'MM/DD/YYYY') as BirthDateFormatted,
 								mcs.dbo.FormatPhone(s.HomePhoneNumber) as home_phone_formatted,
                                 
@@ -2020,6 +2153,54 @@ namespace CAIRS
 
 			return ExecuteSQLStatement(Constants.DBNAME_ASSET_TRACKING, sSQL);
 		}
+
+        public static DataSet DsGetCheckInType(bool isDisplayActiveOnly, string businessRulelist, string orderBy)
+        {
+            string sWhereClauseIsActive = "";
+            string sWhereClauseBusinessRule = "";
+
+
+            if (isDisplayActiveOnly)
+            {
+                sWhereClauseIsActive = " AND c.Is_Active = 1 ";
+            }
+
+            if (!Utilities.isNull(businessRulelist))
+            {
+                sWhereClauseBusinessRule = @" AND c.Code in (
+												select 
+													d.Code
+												from Business_Rule b
+												inner join Business_Rule_Detail d
+													on d.Business_Rule_ID = b.ID
+												where 1=1
+													and b.Code in (
+														select * from dbo.CSVToTable(@Business_Rule_List,',')
+													)
+													and b.Table_Name = 'CT_Check_In_Type'
+											)";
+            }
+
+            if (!Utilities.isNull(orderBy))
+            {
+                orderBy = " ORDER BY " + orderBy;
+            }
+
+            string sSQL = @"DECLARE @Business_Rule_List AS VARCHAR(MAX)
+				
+							SET @Business_Rule_List = '" + businessRulelist + @"'
+							
+							select 
+								*
+							from CT_Check_In_Type c
+							where 1=1 "
+                           + sWhereClauseIsActive
+                           + sWhereClauseBusinessRule
+                           + orderBy
+                           ;
+
+            return ExecuteSQLStatement(Constants.DBNAME_ASSET_TRACKING, sSQL);
+        }
 
 		public static DataSet DsGetCheckOutAssignment(string student_id, string serialNumber, string tag_id)
 		{
@@ -3713,7 +3894,7 @@ namespace CAIRS
 		/// <param name="p_Added_By_Emp_ID">Added_By_Emp_ID</param>
 		/// <param name="p_Date_Added">Date_Added</param>
 		/// <returns>String value of the ID that was updated or inserted</returns>
-		public static string Upsert_Asset_Attachment(string p_ID, string p_Asset_ID, string p_Student_ID, string p_Asset_Tamper_ID, string p_File_Type_ID, string p_Name, string p_Description, string p_Added_By_Emp_ID, string p_Date_Added, string p_Modified_By_Emp_ID, string p_Date_Modified)
+		public static string Upsert_Asset_Attachment(string p_ID, string p_Asset_Student_Transaction_ID, string p_Asset_ID, string p_Student_ID, string p_Asset_Tamper_ID, string p_Attachment_Type_ID, string p_File_Type_ID, string p_Name, string p_Description, string p_Added_By_Emp_ID, string p_Date_Added, string p_Modified_By_Emp_ID, string p_Date_Modified)
 		{
 			ArrayList arrParamName = new ArrayList();
 			ArrayList arrParmnValue = new ArrayList();
@@ -3721,6 +3902,10 @@ namespace CAIRS
 			//ID
 			arrParamName.Add("ID");
 			arrParmnValue.Add(p_ID);
+
+            //Asset_Student_Transaction_ID
+            arrParamName.Add("Asset_Student_Transaction_ID");
+            arrParmnValue.Add(p_Asset_Student_Transaction_ID);
 
 			//Asset_ID
 			arrParamName.Add("Asset_ID");
@@ -3733,6 +3918,10 @@ namespace CAIRS
             //Asset_Tamper_ID
             arrParamName.Add("Asset_Tamper_ID");
             arrParmnValue.Add(p_Asset_Tamper_ID);
+
+            //Attachment_Type_ID
+            arrParamName.Add("Attachment_Type_ID");
+            arrParmnValue.Add(p_Attachment_Type_ID);
 
 			//File_Type_ID
 			arrParamName.Add("File_Type_ID");
@@ -4086,6 +4275,28 @@ namespace CAIRS
 
 			return ExecuteStoredProc(Constants.STORED_PROC_SP_VALIDATE_MASS_ASSIGN_ASSET_TO_BIN, arrNames, arrValues);
 		}
+
+        public static DataSet DsGetStudentCheckInReceipt(string student_id, string from_date, string to_date)
+        {
+            Utilities.Assert(!Utilities.isNull(student_id) && !Utilities.isNull(from_date) && !Utilities.isNull(to_date), "Student ID, From Date and To Date all Expected.");
+
+            ArrayList arrNames = new ArrayList();
+            ArrayList arrValues = new ArrayList();
+
+            //Student ID
+            arrNames.Add("Student_List");
+            arrValues.Add(student_id);
+
+            //From Date
+            arrNames.Add("FromDate");
+            arrValues.Add(from_date);
+
+            //To Date
+            arrNames.Add("ToDate");
+            arrValues.Add(to_date);
+
+            return ExecuteStoredProc("sp_Student_Check_In_Receipt", arrNames, arrValues);
+        }
 
 		#endregion
 

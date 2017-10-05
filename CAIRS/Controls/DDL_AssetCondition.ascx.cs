@@ -14,6 +14,7 @@ namespace CAIRS.Controls
         /// Required Site defaulted to false
         /// </summary>
         public bool IsAssetConditionRequired = false;
+        public string data_column = "Asset_Condition_ID";
 
         /// <summary>
         /// AutoPostBack
@@ -63,6 +64,8 @@ namespace CAIRS.Controls
                 reqAssetCondition.Visible = IsAssetConditionRequired;
                 reqAssetCondition.ErrorMessage = "Required Field: " + FieldName;
                 reqAssetCondition.ValidationGroup = ValidationGroup;
+
+                ddlAssetCondition.Attributes["data_column"] = data_column;
             }
         }
 

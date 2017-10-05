@@ -2,6 +2,7 @@
 
 <%@ Register Src="~/Controls/DDL_Site.ascx" TagName="DDL_Site" TagPrefix="UC_DDL_SITE" %>
 <%@ Register Src="~/Controls/DDL_Bin.ascx" TagName="DDL_Bin" TagPrefix="UC_DDL_Bin" %>
+<%@ Register Src="~/Controls/DDL_AssetBaseType.ascx" TagName="DDL_AssetBaseType" TagPrefix="UC_DDL_AssetBaseType" %>
 <%@ Register Src="~/Controls/DDL_AssetType.ascx" TagName="DDL_AssetType" TagPrefix="UC_DDL_AssetType" %>
 <%@ Register Src="~/Controls/DDL_AssetCondition.ascx" TagName="DDL_AssetCondition" TagPrefix="UC_DDL_AssetCondition" %>
 <%@ Register Src="~/Controls/DDL_AssetDisposition.ascx" TagName="DDL_AssetDisposition" TagPrefix="UC_DDL_AssetDisposition" %>
@@ -48,11 +49,19 @@
 	<!-- Add Asset Form -->
 	<div id="divAddDetailSection" class="row" runat="server">
 		<div class="col-sm-6">
+            <asp:UpdatePanel runat="server" ID="updatePanelBaseAndType" UpdateMode="Always">
+                <ContentTemplate>
+                    <UC_DDL_AssetBaseType:DDL_AssetBaseType ID="ddlBaseType" ValidationGroup="vgAddAsset" runat="server" />
 
-			<UC_DDL_AssetType:DDL_AssetType ID="ddlAssetType" ValidationGroup="vgAddAsset" runat="server" />
+			        <br />
+			        <br />
 
-			<br />
-			<br />
+			        <UC_DDL_AssetType:DDL_AssetType ID="ddlAssetType" ValidationGroup="vgAddAsset" runat="server" />
+
+			        <br />
+			        <br />
+                </ContentTemplate>
+            </asp:UpdatePanel>
 
 			<UC_DDL_AssetCondition:DDL_AssetCondition ID="ddlAssetCondition" ValidationGroup="vgAddAsset" runat="server" />
 
@@ -61,150 +70,155 @@
 
 			<UC_DDL_Bin:DDL_Bin ID="ddlBin" ValidationGroup="vgAddAsset" runat="server" />
 
-            <br />
+			<br />
 			<br />
 
-            <UC:TXT_Date
-							ID="txtPurchasedDate"
-							runat="server"
-							placeholder="Purchased Date"
-							IsDateRequired="true"
-							EnableClientScript="true"
-							ValidationGroup="vgAddAsset"></UC:TXT_Date>
+			<UC:TXT_Date
+				ID="txtPurchasedDate"
+				runat="server"
+				placeholder="Purchased Date"
+				IsDateRequired="true"
+				EnableClientScript="true"
+				ValidationGroup="vgAddAsset"></UC:TXT_Date>
 
-            
+
 
 		</div>
 
 		<div class="col-sm-6">
 
-					<asp:UpdatePanel runat="server" ID="updatePanelLeasedInfo" UpdateMode="Conditional">
-				        <ContentTemplate>
-					        <div class="row add-asset-leased">
-
-						        <asp:CheckBox ID="chkIsLeased" Text="&nbsp;&nbsp;Leased" runat="server" AutoPostBack="true" OnCheckedChanged="chkIsLeased_CheckedChanged" CssClass="col-sm-2" />
-
-						        <span runat="server" id="spLeasedTermDays" visible="false">
-
-							        <div class="col-sm-4">
-
-								        <asp:TextBox runat="server" ID="txtLeasedTermDays" placeholder="Leased Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
-
-								        <asp:RequiredFieldValidator
-									        runat="server"
-									        ID="reqLeasedTermDays"
-									        ControlToValidate="txtLeasedTermDays"
-									        CssClass="invalid"
-									        Display="Dynamic"
-									        Text="Required"
-									        ErrorMessage="Required"
-									        ValidationGroup="vgAddAsset">
-								        </asp:RequiredFieldValidator>
-
-								        <asp:CompareValidator
-									        ID="cvLeasedTermDays"
-									        Text="Must be numeric."
-									        ErrorMessage="Must be numeric."
-									        CssClass="invalid"
-									        Display="Dynamic"
-									        Operator="DataTypeCheck"
-									        EnableClientScript="true"
-									        ControlToValidate="txtLeasedTermDays"
-									        Type="Integer"
-									        ValidationGroup="vgAddAsset"
-									        runat="server" />
-
-							        </div>
-
-							
-						        </span>
-					        </div>
-                        </ContentTemplate>
-			        </asp:UpdatePanel>
-
-                    <br />
-                
-                    <asp:TextBox runat="server" ID="txtWarrantyTermDays" placeholder="Warranty Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
-
-					<asp:RequiredFieldValidator
-						runat="server"
-						ID="reqWarrantTermDays"
-						ControlToValidate="txtWarrantyTermDays"
-						CssClass="invalid"
-						Display="Dynamic"
-						Text="Required"
-                        Visible="false"
-						ErrorMessage="Required"
-						ValidationGroup="vgAddAsset">
-					</asp:RequiredFieldValidator>
-
-					<asp:CompareValidator
-						ID="cvWarrantyTermDays"
-						Text="Must be numeric."
-						ErrorMessage="Must be numeric."
-						CssClass="invalid"
-						Display="Dynamic"
-						Operator="DataTypeCheck"
-						EnableClientScript="true"
-						ControlToValidate="txtWarrantyTermDays"
-						Type="Integer"
-						ValidationGroup="vgAddAsset"
-						runat="server" />
-            
-                    <br />
-                    <br />        
-
-					<input runat="server" type="text" id="serialNumberTemp" class="form-control" placeholder="Serial #" />
-
-					<asp:RequiredFieldValidator
-						runat="server"
-						ID="reqSerialNumberTemp"
-						ControlToValidate="serialNumberTemp"
-						CssClass="invalid"
-						Display="Dynamic"
-						Text="Required"
-						ErrorMessage="Required"
-						ValidationGroup="vgAddAsset">
-					</asp:RequiredFieldValidator>
-
-					<br />
-					<br />
-
-					<input runat="server" type="text" id="tagIDTemp" class="form-control" placeholder="Tag ID" />
-
-					<asp:RequiredFieldValidator
-						runat="server"
-						ID="reqTagIdTemp"
-						ControlToValidate="tagIDTemp"
-						Display="Dynamic"
-						CssClass="invalid"
-						Text="Required"
-						ErrorMessage="Required"
-						ValidationGroup="vgAddAsset">
-					</asp:RequiredFieldValidator>
-
-				
-			<asp:UpdatePanel ID="updatePanelDuplicateValidator" runat="server">
+			<asp:UpdatePanel runat="server" ID="updatePanelLeasedInfo" UpdateMode="Conditional">
 				<ContentTemplate>
+					<div class="row add-asset-leased">
 
-					<asp:CustomValidator ID="cvDuplicateTagID" CssClass="invalid" EnableClientScript="false" Display="Dynamic" ValidationGroup="vgAddAsset" runat="server"></asp:CustomValidator>
+						<asp:CheckBox ID="chkIsLeased" Text="&nbsp;&nbsp;Leased" runat="server" AutoPostBack="true" OnCheckedChanged="chkIsLeased_CheckedChanged" CssClass="col-sm-2" />
 
+						<span runat="server" id="spLeasedTermDays" visible="false">
+
+							<div class="col-sm-5">
+
+								<asp:TextBox runat="server" ID="txtLeasedTermDays" placeholder="Lease Term (Days)" MaxLength="4" CssClass="form-control"></asp:TextBox>
+
+								<asp:RequiredFieldValidator
+									runat="server"
+									ID="reqLeasedTermDays"
+									ControlToValidate="txtLeasedTermDays"
+									CssClass="invalid"
+									Display="Dynamic"
+									Text="Required"
+									ErrorMessage="Required"
+									ValidationGroup="vgAddAsset">
+								</asp:RequiredFieldValidator>
+
+								<asp:CompareValidator
+									ID="cvLeasedTermDays"
+									Text="Must be numeric."
+									ErrorMessage="Must be numeric."
+									CssClass="invalid"
+									Display="Dynamic"
+									Operator="DataTypeCheck"
+									EnableClientScript="true"
+									ControlToValidate="txtLeasedTermDays"
+									Type="Integer"
+									ValidationGroup="vgAddAsset"
+									runat="server" />
+
+							</div>
+
+
+						</span>
+					</div>
 				</ContentTemplate>
 			</asp:UpdatePanel>
 
 			<br />
 
-			<asp:Button
-				ID="btnAddAssetTemp"
-				CausesValidation="true"
-				Text="Add Asset"
-				OnClientClick="submitAddAsset()"
-				CssClass="btn btn-default"
-				Security_Level_Disabled="30"
+			<asp:TextBox runat="server" ID="txtWarrantyTermDays" placeholder="Warranty Term (Days)" MaxLength="4" CssClass="form-control"></asp:TextBox>
+
+			<asp:RequiredFieldValidator
+				runat="server"
+				ID="reqWarrantTermDays"
+				ControlToValidate="txtWarrantyTermDays"
+				CssClass="invalid"
+				Display="Dynamic"
+				Text="Required"
+				Visible="false"
+				ErrorMessage="Required"
+				ValidationGroup="vgAddAsset">
+			</asp:RequiredFieldValidator>
+
+			<asp:CompareValidator
+				ID="cvWarrantyTermDays"
+				Text="Must be numeric."
+				ErrorMessage="Must be numeric."
+				CssClass="invalid"
+				Display="Dynamic"
+				Operator="DataTypeCheck"
+				EnableClientScript="true"
+				ControlToValidate="txtWarrantyTermDays"
+				Type="Integer"
 				ValidationGroup="vgAddAsset"
-				UseSubmitBehavior="false"
 				runat="server" />
 
+			<br />
+			<br />
+            
+            <asp:TextBox runat="server" ID="tagIDTemp" CssClass="form-control" placeholder="Tag ID"></asp:TextBox>
+
+			<asp:RequiredFieldValidator
+				runat="server"
+				ID="reqTagIdTemp"
+				ControlToValidate="tagIDTemp"
+				Display="Dynamic"
+				CssClass="invalid"
+				Text="Required"
+				ErrorMessage="Required"
+				ValidationGroup="vgAddAsset">
+			</asp:RequiredFieldValidator>
+            
+            <br />
+			<br />
+            
+            <asp:UpdatePanel runat="server" ID="updatePanelSerialNumber" UpdateMode="Conditional">
+                <ContentTemplate>
+
+			            <asp:TextBox runat="server" ID="serialNumberTemp" CssClass="form-control" placeholder="Serial #"></asp:TextBox>
+
+			            <asp:RequiredFieldValidator
+				            runat="server"
+				            ID="reqSerialNumberTemp"
+				            ControlToValidate="serialNumberTemp"
+				            CssClass="invalid"
+				            Display="Dynamic"
+				            Text="Required"
+				            ErrorMessage="Required"
+				            ValidationGroup="vgAddAsset">
+			            </asp:RequiredFieldValidator>
+
+                </ContentTemplate>
+            </asp:UpdatePanel>
+
+
+			<asp:UpdatePanel ID="updatePanelDuplicateValidator" runat="server" UpdateMode="Always">
+				<ContentTemplate>
+
+					<asp:CustomValidator ID="cvDuplicateTagID" CssClass="invalid" EnableClientScript="false" Display="Dynamic" ValidationGroup="vgAddAsset" runat="server"></asp:CustomValidator>
+
+					<br />
+
+					<asp:Button
+						ID="btnAddAssetTemp"
+						CausesValidation="true"
+						Text="Add Asset"
+						OnClientClick="submitAddAsset()"
+						CssClass="btn btn-default"
+						Security_Level_Disabled="30"
+						ValidationGroup="vgAddAsset"
+						UseSubmitBehavior="false"
+						runat="server" />
+
+				</ContentTemplate>
+			</asp:UpdatePanel>
 		</div>
 	</div>
 
@@ -213,9 +227,9 @@
 	<asp:UpdatePanel ID="updatePanelAddAsset" runat="server" style="display: none;">
 		<ContentTemplate>
 
-			<UC_TXT_SerialNum:TXT_SerialNum ID="txt_SerialNum" ValidationGroup="vgAddAsset" runat="server" />
+			<UC_TXT_SerialNum:TXT_SerialNum ID="txt_SerialNum" ValidationGroup="vgAddAsset1" runat="server" />
 
-			<UC_TXT_TagID:TXT_TagID ID="txt_TagID" ValidationGroup="vgAddAsset" runat="server" />
+			<UC_TXT_TagID:TXT_TagID ID="txt_TagID" ValidationGroup="vgAddAsset1" runat="server" />
 
 			<asp:Button
 				ID="btnAddAsset"
@@ -291,6 +305,14 @@
 									Security_Level_Disabled="30"
 									runat="server" />
 							</li>
+							<li>
+								<asp:LinkButton
+									runat="server"
+									ID="lnkExportToExcel"
+									Text="Export List"
+									OnClick="lnkExportToExcel_Click"> 
+								</asp:LinkButton>
+							</li>
 						</ul>
 
 					</li>
@@ -337,15 +359,13 @@
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Tag_ID")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
-					<asp:TemplateColumn HeaderText="Serial#">
+					<asp:TemplateColumn HeaderText="Serial #">
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Serial_Number")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
@@ -353,7 +373,6 @@
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Asset_Type_Name")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
@@ -361,7 +380,6 @@
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Bin_Number")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
@@ -369,7 +387,6 @@
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Asset_Condition_Name")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
@@ -377,31 +394,27 @@
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Is_Leased")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
-                    
-                    <asp:TemplateColumn HeaderText="Purchased">
+
+					<asp:TemplateColumn HeaderText="Purchased">
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Date_Purchased_Formatted")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
-					
-                    <asp:TemplateColumn HeaderText="Lease Term">
+
+					<asp:TemplateColumn HeaderText="Lease Term">
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Leased_Term_Days")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
-                    <asp:TemplateColumn HeaderText="Warranty Term">
+					<asp:TemplateColumn HeaderText="Warranty Term">
 						<ItemTemplate>
 
 							<%# DataBinder.Eval(Container.DataItem, "Warranty_Term_Days")%>
-
 						</ItemTemplate>
 					</asp:TemplateColumn>
 
@@ -474,6 +487,9 @@
 			<input type="hidden" id="hdnSelectedSite" runat="server" />
 			<input type="hidden" id="hdnHasAssetInBin" runat="server" />
 		</ContentTemplate>
+		<Triggers>
+			<asp:PostBackTrigger ControlID="lnkExportToExcel" />
+		</Triggers>
 	</asp:UpdatePanel>
 
 	<!-- Bootstrap Modal Dialog -->
@@ -529,19 +545,19 @@
 		</div>
 	</div>
 
-    
+
 
 	<!-- Bootstrap Modal Dialog -->
 	<div class="modal" id="popupEditAssetDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog custom-class">
 
-            <asp:UpdateProgress ID="updateAssetSearchGridProgress" runat="server" DisplayAfter="10" AssociatedUpdatePanelID="updatePanelEditAssetDetail">
-                <ProgressTemplate>
-                    <div class="divWaiting">
-                        <img src="../Images/ajax-loader.gif"  />
-                    </div>
-                </ProgressTemplate>
-            </asp:UpdateProgress>
+			<asp:UpdateProgress ID="updateAssetSearchGridProgress" runat="server" DisplayAfter="10" AssociatedUpdatePanelID="updatePanelEditAssetDetail">
+				<ProgressTemplate>
+					<div class="divWaiting">
+						<img src="../Images/ajax-loader.gif" />
+					</div>
+				</ProgressTemplate>
+			</asp:UpdateProgress>
 
 			<asp:UpdatePanel ID="updatePanelEditAssetDetail" runat="server" UpdateMode="Conditional">
 				<ContentTemplate>
@@ -590,85 +606,83 @@
 									</tr>
 									<tr id="trEditAssetTemp_IsLeased" runat="server">
 										<td colspan="2">
-                                            <div class="row add-asset-leased">
-											    <asp:CheckBox ID="chkIsLeasedEditAsset" Text="&nbsp;&nbsp;Leased?" runat="server" AutoPostBack="true" OnCheckedChanged="chkIsLeasedEditAsset_CheckedChanged"  CssClass="col-sm-3" />
-                                            
-                                                <span runat="server" id="spEditAssetLeasedInfo" visible="false">
-                                                    <div class="col-sm-4">
+											<div class="row add-asset-leased">
+												<asp:CheckBox ID="chkIsLeasedEditAsset" Text="&nbsp;&nbsp;Leased?" runat="server" AutoPostBack="true" OnCheckedChanged="chkIsLeasedEditAsset_CheckedChanged" CssClass="col-sm-3" />
 
-												        <asp:TextBox runat="server" ID="txtLeasedTermEditAsset" placeholder="Leased Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
+												<span runat="server" id="spEditAssetLeasedInfo" visible="false">
+													<div class="col-sm-4">
 
-												        <asp:RequiredFieldValidator
-													        runat="server"
-													        ID="RequiredFieldValidator1"
-													        ControlToValidate="txtLeasedTermEditAsset"
-													        CssClass="invalid"
-													        Display="Dynamic"
-													        Text="Required"
-													        ErrorMessage="Required"
-													        ValidationGroup="vgEditAssetDetail">
-												        </asp:RequiredFieldValidator>
+														<asp:TextBox runat="server" ID="txtLeasedTermEditAsset" placeholder="Lease Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
 
-												        <asp:CompareValidator
-													        ID="CompareValidator1"
-													        Text="Must be numeric."
-													        ErrorMessage="Must be numeric."
-													        CssClass="invalid"
-													        Display="Dynamic"
-													        Operator="DataTypeCheck"
-													        ControlToValidate="txtLeasedTermEditAsset"
-													        Type="Integer"
-													        ValidationGroup="vgEditAssetDetail"
-													        runat="server" 
-                                                        />
-                                                    </div>
+														<asp:RequiredFieldValidator
+															runat="server"
+															ID="RequiredFieldValidator1"
+															ControlToValidate="txtLeasedTermEditAsset"
+															CssClass="invalid"
+															Display="Dynamic"
+															Text="Required"
+															ErrorMessage="Required"
+															ValidationGroup="vgEditAssetDetail">
+														</asp:RequiredFieldValidator>
 
-											    </span>
-                                            </div>										
-                                        </td>
+														<asp:CompareValidator
+															ID="CompareValidator1"
+															Text="Must be numeric."
+															ErrorMessage="Must be numeric."
+															CssClass="invalid"
+															Display="Dynamic"
+															Operator="DataTypeCheck"
+															ControlToValidate="txtLeasedTermEditAsset"
+															Type="Integer"
+															ValidationGroup="vgEditAssetDetail"
+															runat="server" />
+													</div>
+
+												</span>
+											</div>
+										</td>
 									</tr>
-                                    <tr runat="server" id="trEditAssetTemp_PurchasedDate">
-                                        <td colspan="2">
-                                            <UC:TXT_Date
+									<tr runat="server" id="trEditAssetTemp_PurchasedDate">
+										<td colspan="2">
+											<UC:TXT_Date
 												ID="txtPurchasedDateEditAsset"
 												runat="server"
 												placeholder="Purchased Date"
 												IsDateRequired="true"
 												EnableClientScript="true"
+												ValidationGroup="vgEditAssetDetail"></UC:TXT_Date>
+										</td>
+									</tr>
+									<tr runat="server" id="trEditAssetTemp_WarrantyTermDays">
+										<td colspan="2">
+											<asp:TextBox runat="server" ID="txtWarrantyTermDaysEditAsset" placeholder="Warranty Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
+
+											<asp:RequiredFieldValidator
+												runat="server"
+												ID="RequiredFieldValidator2"
+												ControlToValidate="txtWarrantyTermDaysEditAsset"
+												CssClass="invalid"
+												Display="Dynamic"
+												Text="Required"
+												ErrorMessage="Required"
+												Visible="false"
 												ValidationGroup="vgEditAssetDetail">
-                                            </UC:TXT_Date>
-                                        </td>
-                                    </tr>
-                                    <tr runat="server" id="trEditAssetTemp_WarrantyTermDays">
-                                        <td colspan="2">
-                                            <asp:TextBox runat="server" ID="txtWarrantyTermDaysEditAsset" placeholder="Warranty Term in Days" MaxLength="4" CssClass="form-control"></asp:TextBox>
+											</asp:RequiredFieldValidator>
 
-					                        <asp:RequiredFieldValidator
-						                        runat="server"
-						                        ID="RequiredFieldValidator2"
-						                        ControlToValidate="txtWarrantyTermDaysEditAsset"
-						                        CssClass="invalid"
-						                        Display="Dynamic"
-						                        Text="Required"
-						                        ErrorMessage="Required"
-                                                Visible="false"
-						                        ValidationGroup="vgEditAssetDetail">
-					                        </asp:RequiredFieldValidator>
-
-					                        <asp:CompareValidator
-						                        ID="CompareValidator2"
-						                        Text="Must be numeric."
-						                        ErrorMessage="Must be numeric."
-						                        CssClass="invalid"
-						                        Display="Dynamic"
-						                        Operator="DataTypeCheck"
-						                        EnableClientScript="true"
-						                        ControlToValidate="txtWarrantyTermDaysEditAsset"
-						                        Type="Integer"
-						                        ValidationGroup="vgEditAssetDetail"
-						                        runat="server" />
-                                        </td>
-                                    </tr>
+											<asp:CompareValidator
+												ID="CompareValidator2"
+												Text="Must be numeric."
+												ErrorMessage="Must be numeric."
+												CssClass="invalid"
+												Display="Dynamic"
+												Operator="DataTypeCheck"
+												EnableClientScript="true"
+												ControlToValidate="txtWarrantyTermDaysEditAsset"
+												Type="Integer"
+												ValidationGroup="vgEditAssetDetail"
+												runat="server" />
+										</td>
+									</tr>
 								</table>
 							</div>
 						</div>

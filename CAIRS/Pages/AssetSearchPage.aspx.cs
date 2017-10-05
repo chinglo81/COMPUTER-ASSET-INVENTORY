@@ -483,7 +483,8 @@ namespace CAIRS.Pages
 				ApplySecurityToControl();
 
 				//Set default focus
-				txtIds.Focus();
+				//txtIds.Focus();
+                txtSingleId.Focus();
 			}
 
 			ddlAssetBaseType.SelectedIndexChanged_DDL_AssetBaseType += onSelectedIndexChange_ddlAssetBaseType;
@@ -592,6 +593,19 @@ namespace CAIRS.Pages
 						{
 							radLstIDType.SelectedValue = sValue;
 						}
+                        //Single / Multiple
+                        if (sName.Equals(Constants.SEARCH_FILTER_SINGLE_MULTIPLE))
+                        {
+                            radSingleMultiple.SelectedValue = sValue;
+                            ShowHideSingleMultiple();
+                        }
+
+                        //ID Single
+                        if (sName.Equals(Constants.SEARCH_FILTER_ID_SINGLE))
+                        {
+                            txtSingleId.Text = sValue;
+                        }
+
 						//ID Lists
 						if (sName.Equals(Constants.SEARCH_FILTER_ID_LIST))
 						{
@@ -654,6 +668,12 @@ namespace CAIRS.Pages
 			StringBuilder sbWhereClause = new StringBuilder();
 			string sIDSearchType = radLstIDType.SelectedValue;
 			string sIDList = txtIds.Text;
+            string selected_Single_Multiple = radSingleMultiple.SelectedValue;
+            if (selected_Single_Multiple.Equals("SINGLE"))
+            {
+                sIDList = txtSingleId.Text;
+            }
+           
 			string sSite = ddlSite.SelectedValue;
 			if (sSite.Equals(Constants._OPTION_ALL_VALUE))
 			{
@@ -773,8 +793,8 @@ namespace CAIRS.Pages
             DatabaseUtilities.SaveAssetSearchDetail(QS_ASSET_SEARCH_ID, whereClause, sortorder);
 
             //Data Set to load grid
-            DataSet ds = DatabaseUtilities.DsGetAssetMasterList(whereClause, QS_ASSET_SEARCH_ID);
-            
+            DataSet ds = DatabaseUtilities.DsGetAssetMasterList(whereClause, QS_ASSET_SEARCH_ID, "");
+
             /*Old code to refresh filters.
             string sortorder = SortCriteria + " " + SortDir;
             DataSet ds = DatabaseUtilities.DsGetAssetSearchByID(QS_ASSET_SEARCH_ID, sortorder, false);
@@ -855,6 +875,15 @@ namespace CAIRS.Pages
 			AssetSearchFilters_Value.Add(Constants.SEARCH_FILTER_ID_SEARCH_TYPE, sIDSearchType);
 			AssetSearchFilters_Desc.Add(Constants.SEARCH_FILTER_ID_SEARCH_TYPE, sIDSearchTypeDesc);
 
+            string sSingleMultiple = radSingleMultiple.SelectedValue;
+            string sSingleMultipleDesc = radSingleMultiple.SelectedItem.Text;
+            AssetSearchFilters_Value.Add(Constants.SEARCH_FILTER_SINGLE_MULTIPLE, sSingleMultiple);
+            AssetSearchFilters_Desc.Add(Constants.SEARCH_FILTER_SINGLE_MULTIPLE, sSingleMultipleDesc);
+
+            string sIDSingle = txtSingleId.Text;
+            AssetSearchFilters_Value.Add(Constants.SEARCH_FILTER_ID_SINGLE, sIDSingle);
+            AssetSearchFilters_Desc.Add(Constants.SEARCH_FILTER_ID_SINGLE, sIDSingle);
+
 			string sIDList = txtIds.Text;
 			AssetSearchFilters_Value.Add(Constants.SEARCH_FILTER_ID_LIST, sIDList);
 			AssetSearchFilters_Desc.Add(Constants.SEARCH_FILTER_ID_LIST, sIDList);
@@ -908,6 +937,22 @@ namespace CAIRS.Pages
             string p_Date = DateTime.Now.ToString();
 
             DatabaseUtilities.SaveTransferAsset(p_Asset_Search_ID, p_Asset_ID, p_Transfer_Site_ID, p_Emp_ID, p_Date);
+        }
+
+        private void ShowHideSingleMultiple()
+        {
+            string selected_type = radSingleMultiple.SelectedValue;
+
+            bool IsSingle = selected_type.Equals("SINGLE");
+
+            txtIds.Visible = !IsSingle;
+            txtSingleId.Visible = IsSingle;
+
+            txtIds.Focus();
+            if (IsSingle)
+            {
+                txtSingleId.Focus();
+            }
         }
 
         private bool IsAllCheckedDgAssetSearch()
@@ -1189,6 +1234,57 @@ namespace CAIRS.Pages
         protected void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadAssetSearchDG();
+        }
+
+        private string columnsToExport()
+        {
+            StringBuilder sbColumns = new StringBuilder();
+            
+            //order is the same as the grid
+
+            //1. Tag ID
+            sbColumns.Append("Tag_ID as 'Tag ID', ");
+            //2. Serial Number
+            if(radLstIDType.SelectedValue.Equals("SERNUM"))
+            {
+                sbColumns.Append("Serial_Number as 'Serial #', ");
+            }
+            //3. Asset Type
+            sbColumns.Append("Asset_Type_Desc as 'Asset Type', ");
+            //4. Disposition
+            sbColumns.Append("Asset_Disposition_Desc as 'Disposition', ");
+            //5. Condition
+            sbColumns.Append("Asset_Condition_Desc as 'Condition', ");
+            //6. Site
+            sbColumns.Append("Asset_Site_Desc as 'Site', ");
+            //7. Site Bin
+            sbColumns.Append("Bin_Site_Desc as 'Site Bin', ");
+            //8. Student ID
+            //9. Last Student Assign Name
+            //if Student Id is selected
+            if(radLstIDType.SelectedValue.Equals("STUID"))
+            {
+                sbColumns.Append("Student_ID as 'Student ID', ");
+                sbColumns.Append("Student_Assigned_To as 'Last Assigned Student', ");
+            }
+
+            //remove last two characters
+            string return_Value = sbColumns.ToString();
+            return_Value = return_Value.Substring(0, return_Value.Length - 2);
+
+            return return_Value;
+        }
+
+        protected void lnkExportToExcel_Click(object sender, EventArgs e)
+        {
+            string file_name = "Asset_Search_Results";
+            DataSet ds = DatabaseUtilities.DsGetAssetMasterList(BuildWhereClauseForSearch(), QS_ASSET_SEARCH_ID, columnsToExport());
+            Utilities.ExportDataSetToExcel(ds, Response, file_name);
+        }
+
+        protected void radSingleMultiple_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowHideSingleMultiple();
         }
 
 	}

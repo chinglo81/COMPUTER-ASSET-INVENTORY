@@ -13,6 +13,15 @@ namespace CAIRS.Pages {
     public partial class AssetSearchPage {
         
         /// <summary>
+        /// radSingleMultiple control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList radSingleMultiple;
+        
+        /// <summary>
         /// radLstIDType control.
         /// </summary>
         /// <remarks>
@@ -20,6 +29,15 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList radLstIDType;
+        
+        /// <summary>
+        /// txtSingleId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSingleId;
         
         /// <summary>
         /// txtIds control.
@@ -254,6 +272,15 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkBtnTransfer;
+        
+        /// <summary>
+        /// lnkExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkExportToExcel;
         
         /// <summary>
         /// dgAssetResults control.

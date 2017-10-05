@@ -355,6 +355,15 @@ namespace CAIRS.Controls {
         protected global::CAIRS.Controls.DDL_AssetDisposition ddlDisposition_MarkReceived;
         
         /// <summary>
+        /// ddlCondition_MarkReceived control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CAIRS.Controls.DDL_AssetCondition ddlCondition_MarkReceived;
+        
+        /// <summary>
         /// btnSaveMarkReceivedModal control.
         /// </summary>
         /// <remarks>

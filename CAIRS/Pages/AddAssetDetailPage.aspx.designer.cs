@@ -67,6 +67,24 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAddDetailSection;
         
         /// <summary>
+        /// updatePanelBaseAndType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updatePanelBaseAndType;
+        
+        /// <summary>
+        /// ddlBaseType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CAIRS.Controls.DDL_AssetBaseType ddlBaseType;
+        
+        /// <summary>
         /// ddlAssetType control.
         /// </summary>
         /// <remarks>
@@ -184,31 +202,13 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.WebControls.CompareValidator cvWarrantyTermDays;
         
         /// <summary>
-        /// serialNumberTemp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText serialNumberTemp;
-        
-        /// <summary>
-        /// reqSerialNumberTemp control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSerialNumberTemp;
-        
-        /// <summary>
         /// tagIDTemp control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText tagIDTemp;
+        protected global::System.Web.UI.WebControls.TextBox tagIDTemp;
         
         /// <summary>
         /// reqTagIdTemp control.
@@ -218,6 +218,33 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqTagIdTemp;
+        
+        /// <summary>
+        /// updatePanelSerialNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updatePanelSerialNumber;
+        
+        /// <summary>
+        /// serialNumberTemp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox serialNumberTemp;
+        
+        /// <summary>
+        /// reqSerialNumberTemp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSerialNumberTemp;
         
         /// <summary>
         /// updatePanelDuplicateValidator control.
@@ -344,6 +371,15 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnDeleteSelectedAsset;
+        
+        /// <summary>
+        /// lnkExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkExportToExcel;
         
         /// <summary>
         /// divHeaderSubmittedAssets control.

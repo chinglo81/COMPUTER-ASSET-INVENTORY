@@ -11,17 +11,57 @@
 <%@ Register Src="~/Controls/DDL_InteractionType.ascx" TagName="DDL_InteractionType" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/AddAssetAttachment.ascx" TagName="Add_Attachment" TagPrefix="UC" %>
 <%@ Register Src="~/Controls/TXT_SerialNumber.ascx" TagName="Serial_Number" TagPrefix="UC" %>
+<%@ Register Src="~/Controls/TXT_Date.ascx" TagName="Date" TagPrefix="UC" %>
 
 <asp:Content id="Content1" ContentPlaceHolderid="cph_Body" Runat="server">
     
-	<asp:HiddenField runat="server" ID="hdnStudentID" />
+    <asp:HiddenField runat="server" ID="hdnStudentID" />
 	<asp:HiddenField runat="server" ID="hdnAssetStudentTransactionID" />
 	<asp:HiddenField runat="server" ID="hdnTagId" />
 
 	<h1>Check-in</h1>
 
-	<asp:Label runat="server" ID="lblSuccessfullySubmitted" CssClass="alert alert-success center-block" Visible="false" Text="Successfully Checked-in Asset"></asp:Label>
-
+    <div class="alert alert-success" id="divSuccessfullySubmitted" runat="server" visible="false">
+	    <asp:Label runat="server" ID="lblSuccessfullySubmitted" Text="Successfully Checked-in Asset"></asp:Label>
+        <br />
+        <br />
+        <div runat="server" id="divPrintChkInReceipt">
+            <table>
+                <tr>
+                    <td style="vertical-align:middle">
+                        From:
+                    </td>
+                    <td>
+                        <UC:Date 
+                            runat="server" 
+                            ID="txtFromDate"
+                            EnableClientScript="true"
+                            placeholder="From Date"
+                            ValidationGroup="vgPrintReceipt" 
+                            IsDateRequired="true" 
+                        />
+                    </td>
+                    <td style="width:10px"></td>
+                    <td style="vertical-align:middle">
+                        To:
+                    </td>
+                    <td>
+                        <UC:Date 
+                            runat="server" 
+                            ID="txtToDate"
+                            placeholder="To Date"
+                            EnableClientScript="true" 
+                            ValidationGroup="vgPrintReceipt" 
+                            IsDateRequired="true"/>
+                    </td>
+                    <td style="width:10px"></td>
+                    <td style="vertical-align:top;">
+                        <asp:Button runat="server" ID="btnPrintCheckInReceipt" Text="Print Receipt" ValidationGroup="vgPrintReceipt" CssClass="btn btn-default" OnClick="btnPrintCheckInReceipt_Click" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
 	<!-- Alert: Warning message -->
 	<div runat="server" id="divWarningMsg" class="alert alert-info">
@@ -175,10 +215,10 @@
 					</ItemTemplate>
 				</asp:TemplateColumn>
 
-				<asp:TemplateColumn HeaderText="School">
+				<asp:TemplateColumn HeaderText="Asset Site">
 					<ItemTemplate>
 
-						<%# DataBinder.Eval(Container.DataItem, "Student_School_Name")%>
+						<%# DataBinder.Eval(Container.DataItem, "Asset_Site_Desc")%>
 
 					</ItemTemplate>
 				</asp:TemplateColumn>
@@ -282,7 +322,7 @@
                                 <td colspan="2">
                                     <asp:Button 
 					                    ID="btnProcesssFound" 
-					                    Text="Found" 
+					                    Text="Check-in" 
 					                    CssClass="btn btn-default pull-right" 
 					                    OnClick="btnProcesssFound_Click" 
 					                    runat="server" />
@@ -336,8 +376,12 @@
 						        <UC:DDL_AssetDisposition runat="server" ID="ddlDisposition_CheckIn" IsAssetDispositionRequired="true" ValidationGroup="vgCheckinSubmit" AutoPostBack="true" />
 					        </div>
 
+                            <div class="form-group" id="divStudentResponsibleForBroken" runat="server">
+                                <asp:CheckBox runat="server" ID="chkIsStudentResponsibleForDamage" />
+                            </div>
+
                             <div class="form-group" runat="server" id="divPoliceReport">
-						        <asp:CheckBox runat="server" ID="chkPoliceReport" Text="Police Report Provided?" CssClass="space-check-box" />
+						        <asp:CheckBox runat="server" ID="chkPoliceReport" Text="&nbsp; Is Police Report Provided?" CssClass="space-check-box" />
                             
                                 <div class="alert alert-info">
                                     Note: Please remember to attach police report if you checked the box above.
@@ -373,7 +417,7 @@
 					Text="Submit Check-in" 
 					CssClass="btn btn-default" 
 					OnClick="btnSubmitCheckIn_Click" 
-					OnClientClick="return confirm('Are you sure you want to check-in this asset?')"
+					OnClientClick="return ValidateUploadDocument();"
 					CausesValidation="true" 
 					ValidationGroup="vgCheckinSubmit" 
 					runat="server" />
@@ -454,6 +498,17 @@
 
 			$('#cph_Body_txtTagID_txtTagID').focus();
 		});
+
+		function ValidateUploadDocument()
+		{
+		    var fuData = document.getElementById("cph_Body_uc_AddAttachment_CheckIn_FileUploadAttachment");
+		    var FileUploadPath = fuData.value;
+		    if (FileUploadPath != '') {
+		        alert("You selected a file but did not upload. Please upload your document before submitting.");
+		        return false;
+		    }
+		    return confirm('Are you sure you want to check-in this asset?');
+		}
 	</script>
 
 </asp:Content>

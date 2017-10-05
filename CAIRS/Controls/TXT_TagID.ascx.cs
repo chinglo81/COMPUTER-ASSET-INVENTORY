@@ -13,6 +13,7 @@ namespace CAIRS.Controls
         public string FieldName = "Tag ID";
         public string ValidationGroup = "";
         public bool IsSetFocusOnTxtBox = false;
+        public string PlaceHolder = "Tag ID";
 
         public string Text
         {
@@ -38,6 +39,8 @@ namespace CAIRS.Controls
                 {
                     txtTagID.Focus();
                 }
+
+                txtTagID.Attributes.Add("placeholder", PlaceHolder);
             }
         }
     }

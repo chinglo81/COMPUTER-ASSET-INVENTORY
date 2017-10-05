@@ -1,5 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TAB_Attachment.ascx.cs" Inherits="CAIRS.Controls.TAB_Attachment" %>
 
+<%@ Register Src="~/Controls/DDL_AttachmentType.ascx" TagName="DDL_AttachmentType" TagPrefix="UC" %>
+
 <!--Hidden value to handle insert and update, -1 Means insert--> 
     <asp:HiddenField ID="hdnID" Value="-1" runat="server" />
     <asp:HiddenField ID="hdnAssetID" runat="server" />
@@ -19,6 +21,14 @@
         runat="server">
 
         <Columns>
+             <asp:TemplateColumn HeaderText="Attachment Type">
+				<ItemTemplate>
+
+					<%# DataBinder.Eval(Container.DataItem, "Attachment_Type_Desc")%>
+
+				</ItemTemplate>
+			 </asp:TemplateColumn>
+
              <asp:TemplateColumn HeaderText="File Type">
 				<ItemTemplate>
 
@@ -34,14 +44,6 @@
 				</ItemTemplate>
 			</asp:TemplateColumn>
 
-            <asp:TemplateColumn HeaderText="Description">
-				<ItemTemplate>
-
-					<%# DataBinder.Eval(Container.DataItem, "Description")%>
-
-				</ItemTemplate>
-			</asp:TemplateColumn>
-
             <asp:TemplateColumn HeaderText="Date Added">
 				<ItemTemplate>
 
@@ -50,10 +52,18 @@
 				</ItemTemplate>
 			</asp:TemplateColumn>
 
-            <asp:TemplateColumn HeaderText="Is Tampered Photo?">
+            <asp:TemplateColumn HeaderText="Is Tampered?">
 				<ItemTemplate>
 
 					<%# DataBinder.Eval(Container.DataItem, "Is_Tampered_Attachment")%>
+
+				</ItemTemplate>
+			</asp:TemplateColumn>
+
+            <asp:TemplateColumn HeaderText="Student">
+				<ItemTemplate>
+
+					<%# DataBinder.Eval(Container.DataItem, "Student_Name_ID")%>
 
 				</ItemTemplate>
 			</asp:TemplateColumn>
@@ -124,6 +134,10 @@
                 <div class="panel-body">
                     <div id="divAssetAttachmentInfo" runat="server">
 
+                        <div class="form-group">
+                            <UC:DDL_AttachmentType ID="ddlAttachmentType" runat="server" IsAttachmentTypeRequired="true" ValidationGroup="vgEditAttachement"/>
+                        </div>
+
                         <!-- Attachment Name -->
                         <div class="form-group">
                             <asp:HiddenField runat="server" ID="hdnFileType" Value="File_Type_Desc" />
@@ -170,6 +184,9 @@
                             <asp:FileUpload ID="FileUploadAttachment" CssClass="form-control" runat="server" />
 
                             <small><strong>Accepted file types:</strong> jpg, jpeg, doc, docx, pdf, xls, xlsx, csv</small>
+                            <br />
+                            <strong>Maximum File Size:</strong> 4MB
+                            <br />
 
                             <asp:RequiredFieldValidator 
                                 ID="reqFile" 
@@ -191,7 +208,31 @@
                                 ErrorMessage="Invalid File type" 
                                 ValidationGroup="vgEditAttachement"
                                 runat="server"  />
+
+                             <asp:CustomValidator 
+                                ID="cvUploadFileSize"
+                                CssClass="invalid" 
+                                EnableClientScript="true"
+                                Display="Dynamic"
+                                runat="server" 
+                                ErrorMessage="Your file is too big. Maximum File Size: 4MB." 
+                                ControlToValidate="FileUploadAttachment"/>
+
                         </div>
+
+                        <div id="divAssetStudentTransactionInfo" runat="server">
+                            <asp:DropDownList runat="server" ID="ddlAssetStudentTransaction" CssClass="form-control" data_column="Asset_Student_Transaction_ID"></asp:DropDownList>
+                        </div>
+
+                        <div class="form-group" runat="server" id="divTamperInfo">
+                            <strong>Is Tampered?: </strong><asp:Label runat="server" ID="lblIsTampered" data_column="Is_Tampered_Attachment"></asp:Label>
+                            <br />
+                            <br />
+                            <div id="divStudentTamperInfo" runat="server">
+                             <strong>Student: </strong><asp:Label runat="server" ID="lblStudent" data_column="Student_Name_ID"></asp:Label>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

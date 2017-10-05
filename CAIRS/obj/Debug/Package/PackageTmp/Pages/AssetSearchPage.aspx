@@ -20,19 +20,35 @@
 
             <div class="row">
     	        <div class="col-xs-12">
-
-                    <!-- Search Type Radio List -->
-                    <asp:RadioButtonList runat="server" ID="radLstIDType" CssClass="spaced" RepeatDirection="Horizontal">
-	                    <asp:ListItem Text="Tag ID" Value="TAGID" Selected="True"></asp:ListItem>
-	                    <asp:ListItem Text="Serial #" Value="SERNUM"></asp:ListItem>
-	                    <asp:ListItem Text="Student ID" Value="STUID"></asp:ListItem>
-                    </asp:RadioButtonList>
+                    <table>
+                        <tr>
+                            <td>
+                                <!-- Search Type Radio List -->
+                                <asp:RadioButtonList runat="server" ID="radLstIDType" CssClass="spaced" RepeatDirection="Horizontal">
+	                                <asp:ListItem Text="Tag ID" Value="TAGID" Selected="True"></asp:ListItem>
+	                                <asp:ListItem Text="Serial #" Value="SERNUM"></asp:ListItem>
+	                                <asp:ListItem Text="Student ID" Value="STUID"></asp:ListItem>
+                                </asp:RadioButtonList>
+                            </td>
+                            <td style="border-right:1px solid black;"></td>
+                            <td style="width:20px;"></td>
+                            <td>
+                                <asp:RadioButtonList runat="server" ID="radSingleMultiple" CssClass="spaced" RepeatDirection="Horizontal" OnSelectedIndexChanged="radSingleMultiple_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:ListItem Text="Single" Value="SINGLE" Selected="True"></asp:ListItem>
+	                                <asp:ListItem Text="Multiple" Value="MULTIPLE"></asp:ListItem>
+                                </asp:RadioButtonList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height:5px;" colspan="4"></td>
+                        </tr>
+                    </table>
 
                     <!-- Search Box -->
                     <div class="form-group">
-                        <asp:TextBox runat="server" ID="txtIds" CssClass="form-control ui-autocomplete-input" placeholder="(New line or comma separated)" TextMode="MultiLine" />
+                        <asp:TextBox runat="server" ID="txtSingleId" CssClass="form-control" MaxLength="100" Width="300px"></asp:TextBox>
+                        <asp:TextBox Visible="false" runat="server" ID="txtIds" CssClass="form-control ui-autocomplete-input" placeholder="(New line or comma separated)" TextMode="MultiLine" />
                     </div>
-
                     <!-- Search Buttons -->
                     <asp:Button runat="server" ID="btnSearch" CssClass="btn btn-default" Text="Search" OnClick="btnApplyFilters_Click" OnClientClick="DisplayProgressLoader();" />
                     <asp:Button runat="server" id="Button" Text="Clear" CssClass="btn btn-primary" OnClick="btnClear_Click"/>
@@ -147,6 +163,14 @@
                                     Security_Level_Disabled="10,20,40">
                                 </asp:LinkButton>
                             </li>
+                             <li>
+                                <asp:LinkButton 
+                                    runat="server" 
+                                    ID="lnkExportToExcel" 
+                                    Text="Export List" 
+                                    OnClick="lnkExportToExcel_Click"> 
+                                </asp:LinkButton>
+                            </li>
                         </ul>
 
                     </li>
@@ -249,6 +273,9 @@
             <asp:Label ID="lblSelected" CssClass="label label-success pull-right" runat="server" />
 
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="lnkExportToExcel"/>
+        </Triggers>
     </asp:UpdatePanel>
 
 	<!-- Assign Asset to Bin - Bootstrap Modal Dialog 
@@ -510,10 +537,23 @@
             }
         }
 
+        function HandleSingleNumberEntered(e) {
+            if (e.keyCode == 35 || e.keyCode == 59) {
+                e.preventDefault();
+
+                $('#cph_Body_btnSearch').focus().click();
+            }
+        }
+        
+
         $(document).ready(function () {
             // Add Asset - Capture enter fire from scanner, refocus to Tag ID
             $('#cph_Body_txtIds').on('keypress', function (e) {
                HandleNumberEntered(e)
+            });
+
+            $('#cph_Body_txtSingleId').on('keypress', function (e) {
+                HandleSingleNumberEntered(e)
             });
 
             $('#divTransferAssetModal').on('hidden.bs.modal', function () {

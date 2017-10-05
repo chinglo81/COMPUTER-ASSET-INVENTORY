@@ -10,6 +10,8 @@
 					ID="imgStudentPhoto" 
 					CssClass="img-responsive"
 					AlternateText="Unable to Display Student Photo"
+                    Width="200px"
+                    Height="300px"
 					runat="server" />
 
 			</div>
@@ -21,7 +23,7 @@
 
 				<asp:Label runat="server" ID="lblStudentID" data_column="StudentId" /><br />
 
-				<asp:Label runat="server" ID="lblStudentSchool" data_column="StudentSchoolName" /><br />
+				<asp:Label runat="server" ID="lblStudentSchool" data_column="StudentShortSchoolName" /><br />
 
                 <asp:Label runat="server" ID="lblSecondaryEnrollment" data_column="Current_Enroll_School_Name_Display" />
 
@@ -35,8 +37,8 @@
 
 				Special Ed: <strong><asp:Label runat="server" ID="lblSpecialEd" data_column="SpecialEd"></asp:Label></strong><br />
 
-				Service Fee: <strong><asp:Label runat="server" ID="Label1" data_column="HasServiceInsuranceFee" /></strong><br />
-
+				Limited Technology Coverage: <strong><asp:Label runat="server" ID="Label1" data_column="HasServiceInsuranceFee" /></strong><br />
+                <asp:Label runat="server" ID="lblPaidDate" data_column="Date_LTC_Paid_Html"></asp:Label>
 				<asp:Button ID="btnChangeStudent" Text="Change Student" CssClass="btn btn-primary btn-xs" OnClick="OnClickChangeStudent" runat="server" />
 
 			</div>

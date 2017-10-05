@@ -216,6 +216,7 @@ namespace CAIRS.Pages
                 string sAllowDeadpool = ds.Tables[0].Rows[0]["Allow_Deadpool"].ToString();
                 string sAllowTransfer = ds.Tables[0].Rows[0]["Allow_Transfer"].ToString();
                 string sAllowLawEnforcement = ds.Tables[0].Rows[0]["Allow_Law_Enforcement"].ToString();
+                string sDisabledByBaseType = ds.Tables[0].Rows[0]["Disable_Add_By_Base_Type"].ToString();
                 
                 int iLeased_ADP_Count = int.Parse(sLeased_ADP_Count);
                 bool IsLeased = sLeased.Equals("yes");
@@ -229,10 +230,14 @@ namespace CAIRS.Pages
                     //Should not be visible if not leased
                     lnkBtnEwaste.Visible = false;
                 }
-                showEwaste = !IsLeased && IsAllowEwaste;
+                showEwaste = !IsLeased //Not leased
+                             && (IsAllowEwaste || sDisabledByBaseType.Equals("1")) //Disp allows for ewaste or base type is disabled
+                             && !sDisposition.Equals(Constants.DISP_E_WASTE_WAREHOUSE); //current disposition is not already e-waste
+
+
                 showEwasteRevert = sDisposition.Equals(Constants.DISP_E_WASTE_WAREHOUSE);
-                
-                showDeadPool = IsLeased && iLeased_ADP_Count >= 1 && IsAllowDeadpool;
+
+                showDeadPool = IsLeased && ((iLeased_ADP_Count >= 1 && IsAllowDeadpool) || (sDisabledByBaseType.Equals("1") && !sDisposition.Equals(Constants.DISP_DEAD_POOL)));
                 showDeadPoolRevert = sDisposition.Equals(Constants.DISP_DEAD_POOL);
 
                 showTransfer = IsAllowTransfer;
@@ -241,7 +246,7 @@ namespace CAIRS.Pages
                 tool_tip = "Not allowed when disposition is \"" + sDisposition_Desc + "\"";
             }
 
-            
+            lnkBtnEwaste.Visible = showEwaste;
             lnkBtnEwasteRevert.Visible = showEwasteRevert;
             
             lnkBtnDeadPoolAsset.Visible = showDeadPool;

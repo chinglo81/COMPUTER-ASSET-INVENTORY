@@ -75,12 +75,16 @@ namespace CAIRS.Controls
                 string sLeaseDate = ds.Tables[0].Rows[0]["Leased_Term_Date"].ToString().Trim();
                 string sLeased = ds.Tables[0].Rows[0]["Is_Leased"].ToString().ToLower().Trim();
                 string sAllowCreateRepair = ds.Tables[0].Rows[0]["Allow_Create_Repair"].ToString().ToLower().Trim();
+                string sBaseTypeDesc = ds.Tables[0].Rows[0]["Asset_Base_Type_Desc"].ToString().ToLower().Trim();
+                string sDisableCreateByBaseType = ds.Tables[0].Rows[0]["Disable_Add_By_Base_Type"].ToString().ToLower().Trim();
                 string disposition = ds.Tables[0].Rows[0]["Asset_Disposition_Desc"].ToString();
                 string bin_desc = ds.Tables[0].Rows[0]["Bin_Site_Desc"].ToString();
                 string asset_site_id = ds.Tables[0].Rows[0]["Asset_Site_ID"].ToString();
 
                 bool isLeased = sLeased.Equals("yes");
-                bool isAllowCreateRepair = sAllowCreateRepair.Equals("1");
+                bool isDisableCreateByBaseType = sDisableCreateByBaseType.Equals("1");
+                //Disposition and base type must allow for user to create a repair
+                bool isAllowCreateRepair = sAllowCreateRepair.Equals("1") && !isDisableCreateByBaseType;
 
                 hdnIsLeasedDevice.Value = isLeased.ToString();//Need to be set to load disposition for marked received
 
@@ -92,7 +96,14 @@ namespace CAIRS.Controls
 
                 if (!isAllowCreateRepair)
                 {
-                    lblNotAllowCreateMsg.Text = "* Cannot Add Repair when disposion is \"" + disposition + "\".";
+                    string msg = "* Cannot Add Repair when disposition is \"" + disposition + "\".";
+                    
+                    if (isDisableCreateByBaseType)
+                    {
+                        msg = "* Cannot Add Repair for \"" + sBaseTypeDesc.ToUpper() + "\".";
+                    }
+
+                    lblNotAllowCreateMsg.Text = msg;
                 }
 
                 if (isLeased)
@@ -132,6 +143,14 @@ namespace CAIRS.Controls
             ddlDisposition_MarkReceived.LoadDDLAssetDisposition(business_rule, true, true, false);
         }
 
+        private void LoadDDL_Condition_Marked_Received()
+        {
+            string business_rule = Constants.BUSINESS_RULE_CONDITION_AVAILABLE_REPAIR_MARK_RECEIVED;
+            ddlCondition_MarkReceived.LoadDDLAssetCondition(business_rule, true, true, false);
+
+            ddlCondition_MarkReceived.Visible = false;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -145,12 +164,18 @@ namespace CAIRS.Controls
             //Add event handler to the on change event
             //Needs to happen on every postback to function properly
             //ddlRepairType.SelectedIndexChanged_DDL_RepairType += ddlRepairSelectedIndexChange;
+            ddlDisposition_MarkReceived.SelectedIndexChanged_DDL_AssetDisposition += OnSelected_DDL_Disposition;
         }
 
         protected void ddlRepairSelectedIndexChange(object sender, EventArgs args)
         {
             DisplayDetails(false);
             updateRepairDetailModal.Update();
+        }
+
+        protected void OnSelected_DDL_Disposition(object sender, EventArgs args)
+        {
+            ddlCondition_MarkReceived.Visible = ddlDisposition_MarkReceived.SelectedValue.Equals(Constants.DISP_AVAILABLE);
         }
 
         protected void dgRepair_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -281,6 +306,8 @@ namespace CAIRS.Controls
 
             LoadDDL_Disposition_Marked_Received();
 
+            LoadDDL_Condition_Marked_Received();
+
             updatePanelMarkedReceived.Update();
         }
 
@@ -382,7 +409,7 @@ namespace CAIRS.Controls
             //Update disposition if insert
             if (IsInsert())
             {
-                DatabaseUtilities.SaveAssetDisposition(QS_ASSET_ID, Constants.DISP_SENT_FOR_REPAIR, Utilities.GetLoggedOnUser());
+                DatabaseUtilities.SaveAssetDisposition(QS_ASSET_ID, Constants.DISP_SENT_FOR_REPAIR,Utilities.GetLoggedOnUser());
             }
         }
 
@@ -481,12 +508,19 @@ namespace CAIRS.Controls
             {
                 string Asset_Repair_ID = hdnAssetRepairID.Value;
                 string disposition = ddlDisposition_MarkReceived.SelectedValue;
+                string condition = Constants.MCSDBNOPARAM;
+
+                //only save condition if available option is selected
+                if (disposition.Equals(Constants.DISP_AVAILABLE))
+                {
+                    condition = ddlCondition_MarkReceived.SelectedValue;
+                }
                 
                 //Update Received info from asset repair
                 DatabaseUtilities.UpdateAssetRepairReceived(Asset_Repair_ID, disposition, GetLoggOnEmployeeID());
 
                 //Update disposition on asset
-                DatabaseUtilities.SaveAssetDisposition(QS_ASSET_ID, disposition, Utilities.GetLoggedOnUser());
+                DatabaseUtilities.SaveAssetDispositionAndCondition(QS_ASSET_ID, disposition, condition, Utilities.GetLoggedOnUser());
 
                 RefreshForm();
 

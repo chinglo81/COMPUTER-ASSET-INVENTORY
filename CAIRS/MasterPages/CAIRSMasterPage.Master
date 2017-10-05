@@ -132,7 +132,10 @@
 
 					<!-- Run jQuery functions for Update Panel refreshes -->
 					<script type="text/javascript">
-						Sys.WebForms.PageRequestManager.getInstance().add_endRequest(iePlaceholderFix);
+					    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(iePlaceholderFix);
+
+					    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(HideProgressLoader);
+
 					</script>
 
 				</asp:ContentPlaceHolder>

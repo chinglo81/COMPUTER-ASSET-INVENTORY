@@ -35,6 +35,18 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cph_Body" runat="server">
+    <asp:Calendar runat="server" ID="calendar" BackColor="White" BorderColor="Black" BorderStyle="Solid" CellSpacing="1" Font-Names="Verdana" Font-Size="9pt" ForeColor="Black" Height="800px" NextPrevFormat="ShortMonth" Width="900px">
+        <DayHeaderStyle Font-Bold="True" Font-Size="8pt" ForeColor="#333333" Height="8pt" />
+        <DayStyle BackColor="#CCCCCC" HorizontalAlign="Left" VerticalAlign="Top" />
+        <NextPrevStyle Font-Bold="True" Font-Size="8pt" ForeColor="White" />
+        <OtherMonthDayStyle ForeColor="#999999" />
+        <SelectedDayStyle BackColor="#333399" ForeColor="White" />
+        <TitleStyle BackColor="#333399" BorderStyle="Solid" Font-Bold="True" Font-Size="12pt" ForeColor="White" Height="12pt" />
+        <TodayDayStyle BackColor="#999999" ForeColor="White" />
+        
+    </asp:Calendar>
+
+
     <UC:Date runat="server" ID="txtTestDate" ValidationGroup="vgTest" IsDateRequired="true" PlaceHolder="Ching is da bomb"/>
     <UC:Date runat="server" ID="Date1" ValidationGroup="vgTest" IsDateRequired="true"  PlaceHolder="Ching is da bomb2"/>
     <asp:Button runat="server" ID="btnTest" Text="test" ValidationGroup="vgTest" />

@@ -94,6 +94,15 @@ namespace CAIRS.Pages._partials {
         protected global::System.Web.UI.WebControls.LinkButton lnkBtnUserGuide;
         
         /// <summary>
+        /// hypFAQs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hypFAQs;
+        
+        /// <summary>
         /// lnkBtnDocumentProgramBarcode control.
         /// </summary>
         /// <remarks>

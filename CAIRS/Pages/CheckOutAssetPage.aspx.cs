@@ -138,6 +138,42 @@ namespace CAIRS.Pages
 			return IsValid;
 		}
 
+        private bool ValidateOnSubmitPendingBatches()
+        {
+            bool IsValid = true;
+            string errorMsg = "";
+            string separator = "<br>";
+            string student_id = txtStudentLookup.SelectedStudentID;
+            string tag_list = hdnPendingTagIds.Value;
+            string serial_number = hdnSerialNumber.Value;
+
+            //Database check
+            DataSet ds = DatabaseUtilities.DsValidateCheckOutAsset(tag_list, hdnSerialNumber.Value, student_id);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                IsValid = false;
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    errorMsg += r["Error"].ToString() + separator;
+                }
+            }
+
+            if (errorMsg.Length > 0)
+            {
+                errorMsg = errorMsg.Substring(0, errorMsg.Length - separator.Length);
+            }
+
+            //Check to see if the maximum availability has been reached
+            if (!IsValid)
+            {
+                cvCheckOutAsset.IsValid = false;
+                cvCheckOutAsset.ErrorMessage = errorMsg;
+                cvCheckOutAsset.Text = errorMsg;
+            }
+
+            return IsValid;
+        }
+
 		private void loadStudentInfo()
 		{
 			lblSuccessMessage.Visible = false;
@@ -292,15 +328,30 @@ namespace CAIRS.Pages
                 if (ValidateCheckOutAsset() && Page.IsValid)
                 {
                     LoadPendingAssignment();
-                    
+
+                    txtTagID.Text = "";
                     txtSerialNumber.Text = "";
                     txtSerialNumber.Visible = false;
+                }
+                else
+                {
+                    //only clear if serial is valid
+                    if (txtSerialNumber.reqSerialNum.IsValid)
+                    {
+                        txtSerialNumber.Visible = false;
+                        txtSerialNumber.Text = "";
+                        txtTagID.Text = "";
+                    }
+                    else
+                    {
+                        txtSerialNumber.txtSerialNumber.Focus();
+                    }
                 }
 
             }
 
-            Utilities.SelectTextBox(txtTagID.txtTagID);
-            txtTagID.txtTagID.Focus();
+            //Utilities.SelectTextBox(txtTagID.txtTagID);
+            //txtTagID.txtTagID.Focus();
            
 		}
 
@@ -346,8 +397,12 @@ namespace CAIRS.Pages
 
         protected void btnSubmitPendingAssignment_Click(object sender, EventArgs e)
         {
-            SubmitPendingAssignments();
-            NavigateTo(Constants.PAGES_CHECK_OUT_ASSET_PAGE + "?Success=true", false);
+            //Validate again on submit
+            if (ValidateOnSubmitPendingBatches())
+            {
+                SubmitPendingAssignments();
+                NavigateTo(Constants.PAGES_CHECK_OUT_ASSET_PAGE + "?Success=true", false);
+            }
         }
 	}
 }

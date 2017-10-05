@@ -644,6 +644,7 @@
 	</div>
 
 	<script>
+        
 		function AssignAssetOnEnterKeyPress(e) {
 			if (e.keyCode == 13 || e.keyCode == 35 || e.keyCode == 59) {
 				e.preventDefault();

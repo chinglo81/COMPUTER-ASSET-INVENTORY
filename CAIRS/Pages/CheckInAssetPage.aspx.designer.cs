@@ -40,6 +40,15 @@ namespace CAIRS.Pages {
         protected global::System.Web.UI.WebControls.HiddenField hdnTagId;
         
         /// <summary>
+        /// divSuccessfullySubmitted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSuccessfullySubmitted;
+        
+        /// <summary>
         /// lblSuccessfullySubmitted control.
         /// </summary>
         /// <remarks>
@@ -47,6 +56,42 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSuccessfullySubmitted;
+        
+        /// <summary>
+        /// divPrintChkInReceipt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPrintChkInReceipt;
+        
+        /// <summary>
+        /// txtFromDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CAIRS.Controls.TXT_Date txtFromDate;
+        
+        /// <summary>
+        /// txtToDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::CAIRS.Controls.TXT_Date txtToDate;
+        
+        /// <summary>
+        /// btnPrintCheckInReceipt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPrintCheckInReceipt;
         
         /// <summary>
         /// divWarningMsg control.
@@ -479,6 +524,24 @@ namespace CAIRS.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::CAIRS.Controls.DDL_AssetDisposition ddlDisposition_CheckIn;
+        
+        /// <summary>
+        /// divStudentResponsibleForBroken control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divStudentResponsibleForBroken;
+        
+        /// <summary>
+        /// chkIsStudentResponsibleForDamage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkIsStudentResponsibleForDamage;
         
         /// <summary>
         /// divPoliceReport control.

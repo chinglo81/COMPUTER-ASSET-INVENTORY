@@ -19,14 +19,15 @@ using System.Web.UI.WebControls;
 using System.Xml;
 using System.Linq;
 using System.Security.Principal;
-
 using SQL = System.Data.SqlClient;
 using CRYPT = System.Security.Cryptography;
-
 using System.Security.Cryptography;
 using CAIRS.Navigation;
-
 using System.Text.RegularExpressions;
+using Microsoft.Reporting.WebForms;
+using Microsoft.ReportingServices;
+using System.Threading;
+
 
 namespace CAIRS
 {
@@ -1067,6 +1068,35 @@ namespace CAIRS
             }
         }
 
+        public static string GetStudentNameByID(string studentid)
+        {
+            //must equate to a studnet who would eb in Power school High School district 
+            ArrayList paramNames = new ArrayList();
+            ArrayList paramValues = new ArrayList();
+            paramNames.Add("studentId");
+            paramValues.Add(studentid);
+            DataSet ds = DatabaseUtilities.ExecuteStoredProc("DataWarehouse", "procGetStudentInfo", paramNames, paramValues);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string student_name = ds.Tables[0].Rows[0]["Student_Name_ID"].ToString();
+                if(!isNull(student_name))
+                {
+                    return student_name;
+                }
+            }
+            return "";
+        }
+
+        public static string GetStudentIDAssignByTransactionID(string asset_student_transaction_id)
+        {
+            DataSet ds = DatabaseUtilities.DsGetByTableColumnValue(Constants.DB_VIEW_ASSET_STUDENT_ASSIGNMENT, Constants.COLUMN_V_ASSET_STUDENT_ASSIGNMENT_ID, asset_student_transaction_id, "");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0][Constants.COLUMN_V_ASSET_STUDENT_ASSIGNMENT_Student_ID].ToString();
+            }
+            return "";
+        }
+
         //Exporting To Excel
         public static void ExportDataGridToExcel(DataGrid dg, HttpResponse Response, string filename)
         {
@@ -2051,6 +2081,157 @@ namespace CAIRS
             }
             return asset_site_code;
         }
+
+        public static bool PrintCheckInReceiptSSRS(string student_id, string from_date, string to_date, HttpResponse r)
+        {
+             DataSet ds = DatabaseUtilities.DsGetStudentCheckInReceipt(student_id, from_date, to_date);
+             if (ds.Tables[0].Rows.Count > 0)
+             {
+                 string sReportName = "StudentCheckInReceipt_Single";
+                 string sReportFolder = "CAIRSReports";
+
+                 string urldbServer = "http://" + System.Configuration.ConfigurationManager.AppSettings.Get("DB_SERVER");
+                 string reportServerName = System.Configuration.ConfigurationManager.AppSettings.Get("REPORTSERVER_URL");
+                 string urlReportServer = urldbServer + reportServerName;
+
+                 ReportViewer rv = new ReportViewer();
+                 rv.ProcessingMode = ProcessingMode.Remote;
+                 rv.ServerReport.ReportServerUrl = new System.Uri(urlReportServer);
+                 rv.ServerReport.ReportPath = "/" + sReportFolder + "/" + sReportName;
+                 ReportParameter[] rptparam = new ReportParameter[3];
+
+                 rptparam[0] = new ReportParameter("Student_ID", student_id);
+                 rptparam[1] = new ReportParameter("FromDate", from_date);
+                 rptparam[2] = new ReportParameter("ToDate", to_date);
+
+                 rv.ServerReport.SetParameters(rptparam);
+                 string format = "PDF",
+                        devInfo = @"<DeviceInfo><Toolbar>True</Toolbar></DeviceInfo>";
+
+                 //out parameters
+
+                 string mimeType = "",
+                     encoding = "",
+                     fileNameExtn = "";
+                 string[] stearms = null;
+                 Microsoft.Reporting.WebForms.Warning[] warnings = null;
+
+                 byte[] result = null;
+
+                 //render report, it will returns bite array
+                 result = rv.ServerReport.Render(format,
+                     devInfo, out mimeType, out encoding,
+                     out fileNameExtn, out stearms, out warnings);
+
+                 r.Clear();
+                 r.AddHeader("Content-Disposition", "attachment; filename=StudentCheckIn_" + student_id + ".pdf");
+                 r.AddHeader("Content-Transfer-Encoding", "binary");
+                 r.ContentType = "application/octet-stream";
+                 r.OutputStream.Write(result, 0, result.Length);
+                 r.Flush();
+                 r.End();
+
+                 return true;
+
+             }
+             return false;
+        }
+
+        #region Validating Attachment
+        
+        private static bool HasDuplicateFileName(string asset_attachment_id, string asset_id, string file_name, string file_type, CustomValidator cvDuplicate, FileUpload file_upload)
+        {
+            bool hasDuplicate = false;
+
+            DataSet ds = DatabaseUtilities.DsValidateDuplicateAttachmentName(asset_id, asset_attachment_id, file_name, file_type);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                hasDuplicate = true;
+                cvDuplicate.IsValid = false;
+            }
+
+            return hasDuplicate;
+        }
+
+        private static bool ValidateFileSize(FileUpload file_upload, CustomValidator cvFileSize)
+        {
+            bool IsValid = true;
+            if (file_upload.HasFile)
+            {
+                HttpPostedFile file = (HttpPostedFile)(file_upload.PostedFile);
+
+                int iMaxFileSIze = int.Parse(Utilities.GetAppSettingFromConfig("MAX_FILE_SIZE_UPLOAD"));
+
+                int iFileSize = file.ContentLength;
+                if (iFileSize > iMaxFileSIze)
+                {
+                    IsValid = false;
+                }
+
+            }
+
+            cvFileSize.IsValid = IsValid;
+
+            return IsValid;
+        }
+
+        public static bool ValidateSaveAttachment(string asset_attachment_id, string asset_id, string file_name, string file_type, CustomValidator cvDuplicate, CustomValidator cvFileSize, FileUpload file_upload)
+        {
+            bool IsValid = true;
+
+            //Check for duplicate file name
+            if (HasDuplicateFileName(asset_attachment_id, asset_id, file_name, file_type, cvDuplicate, file_upload))
+            {
+                IsValid = false;
+            }
+
+            //check for file size
+            if (ValidateFileSize(file_upload, cvFileSize))
+            {
+                IsValid = false;
+            }
+
+            return IsValid;
+        }
+
+        public static void UploadFileToServer(string asset_id, string asset_attachment_id, string fileNameAndType, bool is_insert, FileUpload file_upload)
+        {
+            string folder = Utilities.GetAssetAttachmentFolderLocation() + "\\" + asset_id;
+            string oldFileName = Utilities.GetAttachmentFileFullNameByID(asset_attachment_id).ToLower().Trim();
+            string sanitizeFileName = fileNameAndType.ToLower().Trim();
+            bool IsFileNameChanged = !oldFileName.Equals(sanitizeFileName);
+            string sOldFileName = folder + "\\" + oldFileName;
+            string sNewFileName = folder + "\\" + fileNameAndType;
+
+            //Check to see if there is a file to be uploaded
+            if (file_upload.HasFile && !Utilities.isNull(fileNameAndType))
+            {
+                //Check to see if folder exist. If not, create
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                file_upload.SaveAs(sNewFileName);
+            }
+            else
+            {
+                //Check to see if file needs to be rename for existing attachment
+                if (!is_insert && IsFileNameChanged)
+                {
+                    FileInfo f = new FileInfo(sOldFileName);
+                    if (f.Exists)
+                    {
+                        File.Copy(sOldFileName, sNewFileName);
+                        f.Delete();
+                    }
+                }
+            }
+        }
+       
+        
+        #endregion
+
     }
 
 }

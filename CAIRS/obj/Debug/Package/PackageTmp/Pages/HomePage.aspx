@@ -7,16 +7,16 @@
 		<div class="col-xs-6 col-sm-4">
             
 			<a href="../Pages/AddAssetPage.aspx" class="btn btn-default btn-lg col-xs-12">Add Asset</a>
-			<a href="../Pages/CheckOutAssetPage.aspx" class="btn btn-default btn-lg col-xs-12">Checkout</a>
-			<a href="../Pages/AssetSearchPage.aspx" class="btn btn-default btn-lg col-xs-12">Search</a>
+			<a href="../Pages/CheckOutAssetPage.aspx" class="btn btn-default btn-lg col-xs-12">Asset Checkout</a>
+			<a href="../Pages/AssetSearchPage.aspx" class="btn btn-default btn-lg col-xs-12">Asset Search</a>
             <a href="../Pages/AssetFollowUpPage.aspx" class="btn btn-default btn-lg col-xs-12">Asset Follow-up</a>
 		
         </div>
 		<div class="col-xs-6 col-sm-4">
 
 			<a href="../Pages/AddBinPage.aspx" class="btn btn-default btn-lg col-xs-12">Bin Management</a>
-			<a href="../Pages/CheckInAssetPage.aspx" class="btn btn-default btn-lg col-xs-12">Check-in</a>
-			<a href="../Pages/StudentSearchPage.aspx" class="btn btn-default btn-lg col-xs-12">Student History</a>
+			<a href="../Pages/CheckInAssetPage.aspx" class="btn btn-default btn-lg col-xs-12">Asset Check-in</a>
+			<a href="../Pages/StudentSearchPage.aspx" class="btn btn-default btn-lg col-xs-12">Student Asset History</a>
             <a href="../Pages/AssetReportPage.aspx" class="btn btn-default btn-lg col-xs-12">Reports</a>
 		</div>
         

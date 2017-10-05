@@ -194,10 +194,10 @@
 				        </ItemTemplate>
 			        </asp:TemplateColumn>
 
-                    <asp:TemplateColumn HeaderText="Site">
+                    <asp:TemplateColumn HeaderText="Asset Site">
 				        <ItemTemplate>
 
-					        <%# DataBinder.Eval(Container.DataItem, "Student_School_Name")%>
+					        <%# DataBinder.Eval(Container.DataItem, "Asset_Site_Desc")%>
 
 				        </ItemTemplate>
 			        </asp:TemplateColumn>
@@ -326,13 +326,13 @@
             });
             // Add Asset - Capture enter fire from scanner, refocus to Tag ID
             $('#cph_Body_txtSerialNumber_txtSerialNumber').on('keypress', function (e) {
-                HandleNumberEnteredTagId(e);
+                HandleNumberEnteredSerialNumber(e);
             });
         });
 
         var submit_count = 0;
 
-        function HandleNumberEnteredTagId(e) {
+        function HandleSubmit(e) {
             if (e.keyCode == 96) {
                 e.preventDefault();
                 submit_count++;
@@ -342,12 +342,40 @@
                     submit_count = 0
                 }
             }
+        }
+
+        function HandleNumberEnteredTagId(e) {
+            HandleSubmit(e);
+
+            if (e.keyCode == 35 || e.keyCode == 13 || e.keyCode == 59) {
+                e.preventDefault();
+                var serialNum = $('#cph_Body_txtSerialNumber_txtSerialNumber');
+
+                if (serialNum != null && serialNum.is(":visible")) {
+                    serialNum.select();
+                }else{
+                    $('#cph_Body_btnSearchAsset').focus().click();
+
+                    var txtTagID = $('#cph_Body_txtTagID_txtTagID');
+                    txtTagID.select();
+                }
+
+            }
+        }
+
+        function HandleNumberEnteredSerialNumber(e) {
+            HandleSubmit(e);
 
             if (e.keyCode == 35 || e.keyCode == 13 || e.keyCode == 59) {
                 e.preventDefault();
                 $('#cph_Body_btnSearchAsset').focus().click();
+
+                var txtTagID = $('#cph_Body_txtTagID_txtTagID');
+                txtTagID.select();
             }
         }
+
+
     </script>
 
 </asp:Content>

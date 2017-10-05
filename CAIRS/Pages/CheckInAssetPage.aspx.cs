@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 
+
 namespace CAIRS.Pages
 {
 	public partial class CheckInAssetPage : _CAIRSBasePage
@@ -21,14 +22,6 @@ namespace CAIRS.Pages
 				return Request.QueryString["Check_In_Type"];
 			}
 		}
-
-        private string Qs_Success_Message
-        {
-            get
-            {
-                return Request.QueryString["Sucess_Message"];
-            }
-        }
 
 		private void LoadDisposition_DDL_CheckIn(string business_rule)
 		{
@@ -100,6 +93,7 @@ namespace CAIRS.Pages
             {
                 case Constants.CHECK_IN_TYPE_CODE_STANDARD:
                 case Constants.CHECK_IN_TYPE_CODE_FOUND:
+                case Constants.CHECK_IN_TYPE_CODE_RETURN:
                     if (radSearchType.SelectedValue.Equals(SELECT_TAG_ID) && !isNull(tag_id))
                     {
                         LoadCurrentAssignmentDGBySearch("", "", tag_id, false);
@@ -151,19 +145,50 @@ namespace CAIRS.Pages
                 string asset_transaction_id = dsAssetInfo.Tables[0].Rows[0]["Asset_Student_Transaction_ID"].ToString();
 
                 //Disposition is Lost or stolen and was previously assigned to a student
-                if ((disposition.Equals(Constants.DISP_LOST) || disposition.Equals(Constants.DISP_STOLEN)) && !isNull(asset_transaction_id))
+                if (
+                    (
+                        disposition.Equals(Constants.DISP_LOST) || 
+                        disposition.Equals(Constants.DISP_STOLEN) || 
+                        disposition.Equals(Constants.DISP_NOT_RETURNED)
+                    ) 
+                    && !isNull(asset_transaction_id)
+                )
                 {
                     hdnAssetStudentTransactionID.Value = asset_transaction_id;
+                    string Selected_Check_In_Type =  ddlCheckInType.SelectedValue;
+                    bool hasMatchingDispWithCheckout = true;
 
-                    if (!ddlCheckInType.SelectedValue.Equals(Constants.CHECK_IN_TYPE_CODE_FOUND))
+                    //If disposition is "Lost" or "Stolen", checkin type must be Found
+                    if (disposition.Equals(Constants.DISP_LOST) || disposition.Equals(Constants.DISP_STOLEN))
                     {
-                        string caption = "Please Note";
-                        string msg = "The Check-in Type has been switched from " + ddlCheckInType.SelectedItem.Text + " to \"Found\". This asset was previously marked as \"" + disposition_desc + "\".";
-
-                        DisplayMessage(caption, msg);
-                        ddlCheckInType.SelectedValue = Constants.CHECK_IN_TYPE_CODE_FOUND;
+                        hasMatchingDispWithCheckout = Selected_Check_In_Type.Equals(Constants.CHECK_IN_TYPE_CODE_FOUND);
+                    }
+                    //If disposition is "Not Returned", checkin type must be Found
+                    if (disposition.Equals(Constants.DISP_NOT_RETURNED))
+                    {
+                        hasMatchingDispWithCheckout = Selected_Check_In_Type.Equals(Constants.CHECK_IN_TYPE_CODE_RETURN);
                     }
 
+                    if (!hasMatchingDispWithCheckout)
+                    {
+                        string caption = "Please Note";
+                        string check_in_type_desc = "Found";
+                        string chkin_value = Constants.CHECK_IN_TYPE_CODE_FOUND;
+
+                        if(disposition.Equals(Constants.DISP_NOT_RETURNED))
+                        {
+                            check_in_type_desc = "Return";
+                            chkin_value = Constants.CHECK_IN_TYPE_CODE_RETURN;
+                        }
+
+                        string msg = "The Check-in Type has been switched from " + ddlCheckInType.SelectedItem.Text + " to \"" + check_in_type_desc + "\". This asset was previously marked as \"" + disposition_desc + "\".";
+
+                        DisplayMessage(caption, msg);
+                        ddlCheckInType.SelectedValue = chkin_value;
+                    }
+
+                    ChangeBtnCheckInText();
+                    
                     divAssetInfoImportantMessage.Visible = false;
                     btnProcesssFound.Visible = true;
                 }
@@ -191,12 +216,62 @@ namespace CAIRS.Pages
                 //Only load student info if one records is return. You can potential return multiple records when searching by serial number.
                 if (dsCheckTag.Tables[0].Rows.Count.Equals(1))
                 {
+
+                    //Switch Check In Type depending on the disposition of the asset
+                    string Selected_Check_In_Type = ddlCheckInType.SelectedValue;
+                    string Disposition_ID = dsCheckTag.Tables[0].Rows[0]["Asset_Disposition_ID"].ToString();
+                    string Disposition_Desc = dsCheckTag.Tables[0].Rows[0]["Asset_Disposition_Desc"].ToString();
+                    string check_in_type_desc = "Return";//Default to return
+                    if (Selected_Check_In_Type.Equals(Constants.CHECK_IN_TYPE_CODE_FOUND))
+                    {
+                        check_in_type_desc = "Found";
+                    }
+                    string chkin_value = "";
+
+
+                    bool IsCheckInTypeValid = true;
+                    //Logic is used to switch the check-in type to the correct one
+                    switch (Disposition_ID)
+                    {
+                        case Constants.DISP_NOT_RETURNED:
+                            IsCheckInTypeValid = Selected_Check_In_Type.Equals(Constants.CHECK_IN_TYPE_CODE_RETURN);
+
+                            check_in_type_desc = "Return";
+                            chkin_value = Constants.CHECK_IN_TYPE_CODE_RETURN;
+
+                            break;
+                        case Constants.DISP_ASSIGNED: //If disposition is assigned, check-in type must not be Return
+                            IsCheckInTypeValid = !Selected_Check_In_Type.Equals(Constants.CHECK_IN_TYPE_CODE_RETURN);
+
+                            //switching user to standard type
+                            check_in_type_desc = "Standard";
+                            chkin_value = Constants.CHECK_IN_TYPE_CODE_STANDARD;
+
+                            break;
+                    }
+
+                    //Display Message if not valid
+                    if (!IsCheckInTypeValid)
+                    {
+                        string caption = "Please Note";
+
+                        string msg = "The Check-in Type has been switched from " + ddlCheckInType.SelectedItem.Text + " to \"" + check_in_type_desc + "\". This asset was previously marked as \"" + Disposition_Desc + "\".";
+
+                        DisplayMessage(caption, msg);
+                        ddlCheckInType.SelectedValue = chkin_value;    
+                    }
+
+                    //The return text is too long to display as the button text
+                    ChangeBtnCheckInText();
+
                     //reload the same method by now use student id. This will allow the grid to populate all the currently check out asset to the given student
                     string stuid = dsCheckTag.Tables[0].Rows[0]["Student_ID"].ToString();
                     //Load same method using student id search
                     LoadCurrentAssignmentDGBySearch(stuid, "", "", displaySuccessMessage);
+
                     return;
                 }
+
             }
 
 			//only apply when searching by student or serial number
@@ -205,7 +280,7 @@ namespace CAIRS.Pages
 			divCurrentlyAssigned.Visible = false;
 			dgAssignment.Visible = false;
 			lblResults.Text = "No asset assignments found.";
-			lblSuccessfullySubmitted.Visible = displaySuccessMessage;
+            divSuccessfullySubmitted.Visible = displaySuccessMessage;
             divStudentInfo.Visible = false;
             divAssetInfo.Visible = false;
 
@@ -301,6 +376,20 @@ namespace CAIRS.Pages
 			}
 		}
 
+        private void LoadStudentChkTextStudentResponsible(string asset_id)
+        {
+            DataSet ds = DatabaseUtilities.DsGetByTableColumnValue(Constants.DB_VIEW_ASSET_INFO_CHECKIN, "Asset_ID", asset_id, "");
+            
+            string displayText = "";
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string studentInfo = ds.Tables[0].Rows[0]["Student_Name"].ToString() + " - " + ds.Tables[0].Rows[0]["Student_ID"].ToString();
+                displayText = "&nbsp;&nbsp;Is student (" + studentInfo + ") responsible for damage?";
+            }
+
+            chkIsStudentResponsibleForDamage.Text = displayText;
+        }
+
 		private void LoadControlsForCheckIn(string asset_id)
 		{
             Initialize_Controls_CheckIn_Modal();
@@ -310,6 +399,9 @@ namespace CAIRS.Pages
             string title = "";
             string disposition_business_rule = "";
             string condition_business_rule = "";
+
+            //Load student text
+            LoadStudentChkTextStudentResponsible(asset_id);
 
             switch (check_in_type)
             {
@@ -327,7 +419,6 @@ namespace CAIRS.Pages
                         divAssetStoredSite.Visible = true;
                         LoadResearchAsset(asset_id);
                     }
-
                     break;
                 case Constants.CHECK_IN_TYPE_CODE_FOUND:
                     
@@ -345,6 +436,22 @@ namespace CAIRS.Pages
                         LoadResearchAsset(asset_id);
                     }
                     break;
+                case Constants.CHECK_IN_TYPE_CODE_RETURN:
+                    divBin_CheckIn.Visible = true;
+
+                    title = "Return Check-in";
+                    disposition_business_rule = Constants.BUSINESS_RULE_DISPOSITION_CHECK_IN_RETURN;
+                    condition_business_rule = Constants.BUSINESS_RULE_CONDITION_AVAILABLE_CHECK_IN_RETURN;
+
+                    if (is_flag_research)
+                    {
+                        disposition_business_rule = Constants.BUSINESS_RULE_DISPOSITION_AVAILABLE_RESEARCH;
+
+                        divAssetStoredSite.Visible = true;
+                        LoadResearchAsset(asset_id);
+                    }
+                    break;
+
                 case Constants.CHECK_IN_TYPE_CODE_UNIDENTIFIED:
                     divImportantAffixSticker.Visible = true;
                     divBin_CheckIn.Visible = true;
@@ -417,6 +524,8 @@ namespace CAIRS.Pages
 
                 case Constants.CHECK_IN_TYPE_CODE_STANDARD:
                 case Constants.CHECK_IN_TYPE_CODE_FOUND:
+                case Constants.CHECK_IN_TYPE_CODE_RETURN:
+
                     divSearchBy.Visible = true;
                     LoadControlByRadioSearchType();
                     break;
@@ -510,7 +619,7 @@ namespace CAIRS.Pages
             string p_Bin_ID = Constants.MCSDBNOPARAM;
 	        string p_Comments = txtComments_CheckIn.Text;
             string p_Attachments = uc_AddAttachment_CheckIn.GetAttachmentXML();
-            string p_Stu_Responsible_For_Damage = "0";
+            string p_Stu_Responsible_For_Damage = "0"; //Default Student not responsible
             string p_Emp_ID = Utilities.GetEmployeeIdByLoggedOn(LoggedOnUser);
             string p_Date = DateTime.Now.ToString();
 
@@ -529,8 +638,18 @@ namespace CAIRS.Pages
                 p_Bin_ID = ddlBin_CheckIn.SelectedValue;
             }
 
-            //If disposition is broken. Student will be responsible for the damage.
+            //Broken disposition
             if (p_Disposition_ID.Equals(Constants.DISP_BROKEN))
+            {
+                //If user check this box, student is responsible for damage and will be assessed a fee
+                if (chkIsStudentResponsibleForDamage.Checked)
+                {
+                    p_Stu_Responsible_For_Damage = "1";
+                }
+            }
+
+            //Student is responsible if asset is lost or stolen
+            if (p_Check_In_Type_Code.Equals(Constants.CHECK_IN_TYPE_CODE_LOST) || p_Check_In_Type_Code.Equals(Constants.CHECK_IN_TYPE_CODE_STOLEN))
             {
                 p_Stu_Responsible_For_Damage = "1";
             }
@@ -559,6 +678,7 @@ namespace CAIRS.Pages
                 p_Emp_ID,
                 p_Date
             );
+             
         }
 
 		private void LoadQueryParam()
@@ -575,7 +695,7 @@ namespace CAIRS.Pages
 			}
 
             //Success Message
-            lblSuccessfullySubmitted.Visible = !isNull(QS_SUCCESS);
+            ShowHideSuccessMessage();
 		}
 
 		private void ShowHideChangeStudentBTN()
@@ -602,9 +722,12 @@ namespace CAIRS.Pages
 
             divAssetCondition_CheckIn.Visible = isDisplayCondition;
 
+            divStudentResponsibleForBroken.Visible = false;
             if (selected_disposition.Equals(Constants.DISP_BROKEN))
             {
                 LoadCondition_DDL_CheckIn(Constants.BUSINESS_RULE_CONDITION_AVAILABLE_CHECK_IN_DISP_BROKEN);
+                //Display Is student responsible for damage
+                divStudentResponsibleForBroken.Visible = true;
             }
             else
             {
@@ -613,8 +736,19 @@ namespace CAIRS.Pages
 
             updatePanelCheckInModal.Update();
         }
-
-		private bool IsDisplayStudentLookUp()
+        
+        private void ChangeBtnCheckInText()
+        {
+            //The return text is too long to display as the button text
+            string btnText = ddlCheckInType.SelectedItem.Text;
+            if (ddlCheckInType.SelectedValue.Equals(Constants.CHECK_IN_TYPE_CODE_RETURN))
+            {
+                btnText = "Return";
+            }
+            btnProcesssFound.Text = btnText;
+        }
+		
+        private bool IsDisplayStudentLookUp()
 		{
 			string Selected_Check_In_Type = ddlCheckInType.SelectedValue;
 			if (
@@ -627,6 +761,44 @@ namespace CAIRS.Pages
 			}
 			return false;
 		}
+
+        private void ShowHideSuccessMessage()
+        {
+            bool showSuccess = !isNull(QS_SUCCESS);
+            bool hasStudentID = !isNull(QS_STUDENT_ID);
+            string student_name = "";
+
+            //check to see if a student id is passed in the query string param
+            if (hasStudentID) {
+                student_name = Utilities.GetStudentNameByID(QS_STUDENT_ID);
+            }
+
+            //check to see if the student id is valid
+            if (!isNull(student_name))
+            {
+                student_name = " for " + student_name;
+            }
+
+            //Update success message
+            string msg = "Successfully Checked-in Asset" + student_name;
+            
+            if (showSuccess)
+            {
+                lblSuccessfullySubmitted.Text = msg;
+            }
+            
+            //show and hide
+            divSuccessfullySubmitted.Visible = showSuccess;
+            divPrintChkInReceipt.Visible = showSuccess && hasStudentID && !isNull(student_name);
+
+            //If printing is visible set the dates
+            if (divPrintChkInReceipt.Visible)
+            {
+                string today = DateTime.Now.ToShortDateString();
+                txtFromDate.Text = today;
+                txtToDate.Text = today;
+            }
+        }
 
 		private bool IsAllowCheckin(string disAllowCheckin)
 		{
@@ -692,6 +864,11 @@ namespace CAIRS.Pages
             return ddlCheckInType.SelectedValue.Equals(Constants.CHECK_IN_TYPE_CODE_FOUND);
         }
 
+        private bool IsCheckInTypeReturn()
+        {
+            return ddlCheckInType.SelectedValue.Equals(Constants.CHECK_IN_TYPE_CODE_RETURN);
+        }
+
 		private bool IsCheckInTypeUnidentified()
 		{
 			return ddlCheckInType.SelectedValue.Equals(Constants.CHECK_IN_TYPE_CODE_UNIDENTIFIED);
@@ -725,7 +902,7 @@ namespace CAIRS.Pages
             }
             else 
             { 
-                lblSuccessfullySubmitted.Visible = false; 
+                divSuccessfullySubmitted.Visible = false; 
             }
 			
 			ShowHideChangeStudentBTN();
@@ -874,10 +1051,6 @@ namespace CAIRS.Pages
 			{
 				NavigateTo(Constants.PAGES_CHECK_IN_ASSET_PAGE, false);
 			}
-			else
-			{
-
-			}
 		}
 
 		protected void btnAddAttachmentUnidentified_Click(object sender, EventArgs e)
@@ -895,7 +1068,7 @@ namespace CAIRS.Pages
 			string checkInSiteID = ddlSite.SelectedValue;
 			string tagId = btn.Attributes["Tag_ID"];
 
-            bool flagResearch = (IsCheckInTypeStandard() || IsCheckInTypeFound()) && !assetSiteID.Equals(ddlSite.SelectedValue);
+            bool flagResearch = (IsCheckInTypeStandard() || IsCheckInTypeFound() || IsCheckInTypeReturn()) && !assetSiteID.Equals(ddlSite.SelectedValue);
 
             hdnIsFlagForResearch.Value = flagResearch.ToString();
 			
@@ -921,7 +1094,15 @@ namespace CAIRS.Pages
 
                 string qs_checkintype = "?Check_In_Type=" + ddlCheckInType.SelectedValue;
                 string qs_success = "&Success=true";
-                NavigateTo(Constants.PAGES_CHECK_IN_ASSET_PAGE + qs_checkintype + qs_success, false);
+                string qs_student_id = "";
+
+                string student_id = Utilities.GetStudentIDAssignByTransactionID(hdnAssetStudentTransactionID.Value);
+                if (!isNull(student_id))
+                {
+                    qs_student_id = "&Student_ID=" + student_id; 
+                }
+
+                NavigateTo(Constants.PAGES_CHECK_IN_ASSET_PAGE + qs_checkintype + qs_success + qs_student_id, false);
 			}
 			else
 			{
@@ -934,11 +1115,31 @@ namespace CAIRS.Pages
             string assetSiteID = hdnAssetInfo_Asset_Site_ID.Value;
             string checkInSiteID = ddlSite.SelectedValue;
             string asset_id = hdnAssetInfo_Asset_ID.Value;
-            bool flagResearch = (IsCheckInTypeStandard() || IsCheckInTypeFound()) && !assetSiteID.Equals(ddlSite.SelectedValue);
+            bool flagResearch = (IsCheckInTypeStandard() || IsCheckInTypeFound() || IsCheckInTypeReturn()) && !assetSiteID.Equals(ddlSite.SelectedValue);
 
             hdnIsFlagForResearch.Value = flagResearch.ToString();
 
-            DisplayCheckIn(asset_id, true);
+            //if (ValidateCheckIn(checkInSiteID, assetSiteID) && IsValid)
+            //{
+                DisplayCheckIn(asset_id, true);
+            //}
+        }
+
+        protected void btnPrintCheckInReceipt_Click(object sender, EventArgs e)
+        {
+            string report_url = Server.MapPath("../Reports/StudentCheckInReceipt.rpt");
+            string student_id = QS_STUDENT_ID;
+            string from_date = txtFromDate.Text;
+            string to_date = txtToDate.Text;
+
+            bool hasReport = Utilities.PrintCheckInReceiptSSRS(student_id, from_date, to_date, Response);
+            ShowHideSuccessMessage();
+
+            if (!hasReport)
+            {
+                DisplayMessage("No Record(s) Found","Student ID: " + Utilities.GetStudentNameByID(QS_STUDENT_ID) + "</br>From: " + txtFromDate.Text + " To: " + txtToDate.Text);
+            }
+
         }
 	}
 }

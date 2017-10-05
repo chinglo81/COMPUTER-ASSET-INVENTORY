@@ -17,11 +17,12 @@
 
 <div runat="server" id="divSearchStudent" class="row">
 
-    <div class="col-xs-7">
+    <div class="col-xs-9">
 
         <asp:TextBox 
             ID="txtStudentLookup" 
             CssClass="form-control" 
+            style="min-width:250px"
             placeholder="Student ID or Student Last, First Name" 
             onkeyup="SetContextKey()" 
             runat="server" />

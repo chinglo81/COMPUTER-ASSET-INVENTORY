@@ -1,10 +1,35 @@
 // App specific JavaScript
-$(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
 
-	$(document).on('keypress', '.search-autocomplete', function(e) {
-		console.log(e.keyCode);
+function calcPosition(target) {
+	var op = $(target).offsetParent().offset();
+	var ot = $(target).offset();
+
+	return {
+		top: ot.top - op.top,
+		left: ot.left - op.left,
+		width: $(target).width()
+	};
+}
+
+
+$(document).ready(function () {
+
+	$(document).on('submit', 'form', function () {
+		if (typeof Page_IsValid !== 'undefined' && !Page_IsValid) {
+			$('.placeholder').each(function () {
+			    $(this).css(calcPosition('#' + $(this).attr('for')));
+			});
+		}
+		//DisplayProgressLoader(); --Still work in progress
 	});
+
+	$(document).on('change', 'select', function () {
+		$('.placeholder').each(function () {
+			$(this).css(calcPosition('#' + $(this).attr('for')));
+		});
+	});
+
+	$('[data-toggle="tooltip"]').tooltip();
 
 	$(document).on('click', '#MainContent_passwordResetHelp', function () {
 		$('#MainContent_title').text("Password Guidelines");
@@ -36,9 +61,24 @@ $(document).ready(function () {
 	$('#divViewAssignAssets').on('shown.bs.modal', function () {
 		$('#cph_Body_txtTagIdAdd_txtTagID').focus();
 	});
+    
+	$('#modalAddNewAttachment').on('hidden.bs.modal', function (e) {
+	    $('#cph_Body_btnCloseAddAttachment').focus().click();
+	})
+
+	$('#popupConfirmSaveCheckIn').on('shown.bs.modal', function () {
+	    $('#popupEditStudentCheckIn').css('opacity', .75);
+	    $('#cph_Body_txtEditReason').focus();
+	});
+
+	$('#popupConfirmSaveCheckIn').on('hidden.bs.modal', function () {
+	    $('#popupEditStudentCheckIn').css('opacity', 1);
+	    $('#cph_Body_txtEditReason').val('');
+	});
 
 	// Asp.NET UpdatePanel apply jQuery fix (pass function in add_endRequest() method)
 	Sys.WebForms.PageRequestManager.getInstance().add_endRequest(iePlaceholderFix);
+
 });
 
 
@@ -55,31 +95,36 @@ function iePlaceholderFix() {
 }
 
 function DisplayProgressLoader() {
-    $('#divLoading').modal();
+	$('#divLoading').modal('show');
 }
 
+function HideProgressLoader() {
+    $('#divLoading').modal('hide');
+}
+
+
 function ConfirmTransferAsset() {
-    if (Page_ClientValidate("vgTransferAsset")) {
-        if (confirm('Are you sure you want to transfer this asset?')) {
-            DisplayProgressLoader();
-            return true;
-        }
-    }
-    return false;
+	if (Page_ClientValidate("vgTransferAsset")) {
+		if (confirm('Are you sure you want to transfer this asset?')) {
+			DisplayProgressLoader();
+			return true;
+		}
+	}
+	return false;
 }
 
 function ShowModal(modal_id) {
-    $("#" + modal_id).modal();
+	$("#" + modal_id).modal();
 }
 
 function CloseModal(modal_id) {
-    $("#" + modal_id).modal('hide');
+	$("#" + modal_id).modal('hide');
 }
 
 function ScrollToDiv(div_id) {
-    document.getElementById(div_id).scrollIntoView();
+	document.getElementById(div_id).scrollIntoView();
 }
 
 function GetQueryStringValue(key) {
-    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+	return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }

@@ -20,6 +20,7 @@
 
 				</ItemTemplate>
 			</asp:TemplateColumn>
+            
             <asp:TemplateColumn HeaderText="Assigned To">
 				<ItemTemplate>
 
@@ -27,6 +28,7 @@
 
 				</ItemTemplate>
 			</asp:TemplateColumn>
+
             <asp:TemplateColumn HeaderText="Checked Out">
 				<ItemTemplate>
 
@@ -34,6 +36,7 @@
 
 				</ItemTemplate>
 			</asp:TemplateColumn>
+
             <asp:TemplateColumn HeaderText="Checked In">
 				<ItemTemplate>
 
@@ -41,6 +44,15 @@
 
 				</ItemTemplate>
 			</asp:TemplateColumn>
+            
+            <asp:TemplateColumn HeaderText="Insured?">
+				<ItemTemplate>
+
+					<%# DataBinder.Eval(Container.DataItem, "Has_Insurance")%>
+
+				</ItemTemplate>
+			</asp:TemplateColumn>
+
             <asp:TemplateColumn>
                 <ItemStyle HorizontalAlign="right" />
 				<ItemTemplate>
@@ -83,6 +95,8 @@
                                         id="imgStudentPhoto" 
                                         CssClass="img-responsive img-thumbnail pull-right"
                                         AlternateText="Unable to Display Student Photo"
+                                        Width="200px"
+                                        Height="300px"
                                         runat="server" />
                                 </td>
                             </tr>
